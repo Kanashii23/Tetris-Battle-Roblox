@@ -15,3 +15,83 @@ rojo serve
 ```
 
 For more help, check out [the Rojo documentation](https://rojo.space/docs).
+
+<!-- tetris-battle-game -->
+
+## Playable Modern Neon Arcade implementation
+
+Use the existing Rojo connection, stop Play, wait for synchronization, then restart Play. Solo has server-controlled gameplay. Ranked uses real players in the same Roblox server; Studio's Server & Clients mode with two clients is the fastest battle test.
+
+`src/server/GameConfig.luau` controls the economy, ranks, seasons, capacity limits and Debug. Debug privileges apply only in Studio and use temporary profiles. Debug false uses a separate `_Studio` data namespace in Studio and `_Live` on published servers. Solo always costs zero Energy. Public servers never receive Debug privileges.
+
+See [Studio testing instructions](docs/GAMEPLAY-TESTING.md) for each milestone and [implementation status](docs/DEVELOPMENT-STATUS.md) for changed files and remaining validation. The user confirmed Solo controls and two-client matchmaking/board updates. Cloud persistence, real-device behavior and 100-player capacity require further testing. Historical Facebook rules are configurable approximations, not a claim of exact fidelity.
+
+## HOW TO ADD YOUR OWN SOUNDS
+
+Edit **`src/shared/Config/SoundConfig.luau`**. Paste permitted Roblox audio asset IDs into the named fields in `local sounds`. Empty strings remain silent. Both formats work:
+
+```luau
+Move = "123456789", -- replace this example with your permitted asset ID
+HardDrop = "rbxassetid://123456789", -- also accepts this format
+```
+
+The numbers above demonstrate formatting; no third-party ID is installed. Gameplay code does not need edits.
+
+| Keys | Trigger |
+| --- | --- |
+| `MenuMusic`, `SoloMusic`, `BattleMusic`, `ShopMusic` | Looping music for lobby, Solo, battle, and shop/inventory |
+| `ButtonHover`, `ButtonClick` | Menu hover and activation |
+| `Matchmaking`, `OpponentFound` | Enter search and reserve a real opponent |
+| `Countdown`, `MatchStart` | Countdown ticks and gameplay start |
+| `Move`, `Rotate` | Successful horizontal move or CW/CCW rotation |
+| `SoftDrop`, `HardDrop` | Successful soft-drop step and hard-drop input |
+| `Lock`, `Hold` | A non-clearing lock and successful hold |
+| `Single`, `Double`, `Triple`, `Tetris` | Clear one, two, three, or four lines |
+| `TSpin` | Full T-Spin with no line clear |
+| `TSpinMini`, `TSpinSingle`, `TSpinDouble`, `TSpinTriple` | Mini or full T-Spin clear classification |
+| `Combo`, `BackToBack`, `PerfectClear` | Consecutive clears, continued difficult clears, and an empty board after clearing |
+| `GarbageSend`, `GarbageReceive`, `KO` | Send an uncancelled attack, receive incoming garbage, or top out |
+| `Victory`, `Defeat`, `Draw` | Match outcome |
+| `RankUp`, `RankDown`, `CashEarned` | Result promotion, demotion, or positive Cash award |
+| `EnergyRestored`, `QuestComplete`, `QuestClaim` | Energy increases, a quest reaches its target, or a validated claim succeeds |
+| `Purchase`, `Equip` | Server confirms a purchase or equip |
+| `SeasonReward` | An online profile advances to a new season with history recorded |
+
+Set default `MasterVolume`, `MusicVolume`, and `SFXVolume` at the bottom of this module. Players can adjust independent session volumes in Lobby > Audio and mute in Settings. The pool allows overlapping effects and caps Sound instances; missing/invalid IDs play silently. A configured asset that fails to load is stopped and reported in Output.
+
+Configure sound-pack overrides in the same file:
+
+```luau
+RetroArcade = {
+    Pitch = 1.2,
+    Sounds = { HardDrop = "YOUR_AUDIO_ASSET_ID" },
+},
+```
+
+Replace the placeholder with a numeric asset ID before use. An absent override falls back to `Sounds`; use `""` to silence that key in a pack. Pack IDs match `Default`, `RetroArcade`, `Cyber`, `Crystal`, and `NeonClub` in the catalog. Equip the pack in the inventory or preview it in the shop.
+
+To test an ID:
+
+1. Use an audio asset you own or are permitted to use. Grant the experience access where required in Creator Dashboard. See [Roblox audio assets](https://create.roblox.com/docs/sound/assets).
+2. Set `HardDrop` to that ID, save, stop Play, let Rojo sync, and restart Play.
+3. Open Solo and press Space or the mobile DROP button. Open Settings and toggle mute; then test master/music/SFX separately in Lobby > Audio.
+4. If silent, check Output for loading/permission messages. In a temporary Studio Sound object, set SoundId to the same `rbxassetid://` value and preview it to separate asset access from event handling. Remove that temporary object afterward.
+5. Test in a published test experience too. Studio preview alone does not prove the published experience can use the asset.
+
+## Automated checks
+
+Install the official standalone [Luau tools](https://github.com/luau-lang/luau/releases), then run from the project directory:
+
+```text
+node tests/build-harnesses.js
+luau tests/Engine.spec.luau
+luau tests/Progression.spec.luau
+luau tests/ServerHarness.luau
+luau tests/InputHarness.luau
+luau tests/UIHarness.luau
+rojo build -o "Tetris Battle.rbxlx"
+```
+
+Node.js is needed only to rebuild the three generated harness snapshots. Pure engine/progression tests directly require project modules. Harnesses use Roblox mocks and cannot certify cloud APIs, visuals, physical controls or load capacity. Keep Studio testing separate from these checks.
+
+There is no automatic commit, push or publishing step.

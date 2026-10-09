@@ -1,1 +1,2 @@
-print("Hello world, from server!")
+-- Bootstrap existing Rojo Server hierarchy.
+require(script:WaitForChild("ServerMain"))

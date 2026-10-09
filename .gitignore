@@ -1,8 +1,19 @@
-# Project place file
-/Tetris Battle.rbxlx
 
-# Roblox Studio lock files
-/*.rbxlx.lock
-/*.rbxl.lock
+# Roblox Studio generated files
+*.rbxl.lock
+*.rbxlx.lock
 
-sourcemap.json
+# Temporary files
+*.tmp
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# VS Code local settings
+.vscode/
+
+# Environment secrets
+.env
+.env.*
