@@ -18,21 +18,24 @@ function Color3.new(r,g,b) return setmetatable({R=r,G=g,B=b},{__index={Lerp=func
 function Color3.fromRGB(r,g,b) return Color3.new(r/255,g/255,b/255) end
 function Color3.fromHSV() return Color3.new(1,0,1) end
 local ColorSequence={new=function(v) return v end}
+local NumberSequence={new=function(v) return v end}
+local NumberSequenceKeypoint={new=function(...) return {...} end}
 local ColorSequenceKeypoint={new=function(...) return {...} end}
 local TweenInfo={new=function(...) return {...} end}
 local Enum=setmetatable({},{__index=function(t,key)
 	local group=setmetatable({},{__index=function(g,k) local value={Name=k}; rawset(g,k,value); return value end}); rawset(t,key,group); return group
 end})
-local Font={fromEnum=function(font) return {Name=font.Name} end}
+local Font={new=function(family) return {Family=family} end,fromEnum=function(font) return {Name=font.Name} end}
 local Instance={}
 local methods={}
 function methods:GetChildren() return table.clone(self.Children) end
+function methods:FindFirstChildOfClass(class) for _,child in ipairs(self.Children) do if child.ClassName==class then return child end end end
 function methods:FindFirstChild(name,recursive) for _,c in ipairs(self.Children) do if c.Name==name then return c end; if recursive then local found=c:FindFirstChild(name,true); if found then return found end end end end
 function methods:WaitForChild(name) return assert(self:FindFirstChild(name),"Missing child "..name.." in "..self.Name) end
 function methods:IsA(class) return self.ClassName==class or class=="GuiObject" and ({Frame=true,TextLabel=true,TextButton=true,ImageLabel=true,CanvasGroup=true,ScrollingFrame=true})[self.ClassName] or false end
 function methods:SetAttribute(k,v) self.Attributes[k]=v end
 function methods:GetAttribute(k) return self.Attributes[k] end
-function methods:GetPropertyChangedSignal() return signal() end
+function methods:GetPropertyChangedSignal(key) if not rawget(self,"PropertySignals") then rawset(self,"PropertySignals",{}) end; self.PropertySignals[key]=self.PropertySignals[key] or signal(); return self.PropertySignals[key] end
 function methods:Destroy()
 	if self.Destroying then self.Destroying:fire() end
 	local parent=self.Parent
@@ -47,7 +50,7 @@ function Instance.new(class)
 	setmetatable(obj,{__index=function(self,key)
 		if methods[key] then return methods[key] end
 		if self.Props[key]~=nil then return self.Props[key] end
-		if ({MouseEnter=true,MouseLeave=true,SelectionGained=true,SelectionLost=true,Activated=true,InputBegan=true,Destroying=true,Loaded=true})[key] then self.Props[key]=signal(); return self.Props[key] end
+		if ({MouseEnter=true,MouseLeave=true,SelectionGained=true,SelectionLost=true,Activated=true,InputBegan=true,InputEnded=true,Destroying=true,Loaded=true})[key] then self.Props[key]=signal(); return self.Props[key] end
 		return methods.FindFirstChild(self,key)
 	end,__newindex=function(self,key,value)
 		if key=="CanvasPosition" and self.ClassName=="ScrollingFrame" then local hasRows=false; for _,child in ipairs(self.Children) do if child:IsA("GuiObject") then hasRows=true end end; if not hasRows then value=Vector2.new(0,0) end end
@@ -55,7 +58,8 @@ function Instance.new(class)
  if self.Props.Parent then for i,c in ipairs(self.Props.Parent.Children) do if c==self then table.remove(self.Props.Parent.Children,i); break end end end
  if value then table.insert(value.Children,self) end
 end
-		self.Props[key]=value
+		local previous=self.Props[key]; self.Props[key]=value
+  if previous~=value and self.PropertySignals and self.PropertySignals[key] then self.PropertySignals[key]:fire() end
 	end})
 	return obj
 end
@@ -64,7 +68,7 @@ local ReplicatedStorage=named("Folder","ReplicatedStorage")
 local Shared=named("Folder","Shared",ReplicatedStorage)
 local ConfigFolder=named("Folder","Config",Shared)
 for _,name in ipairs({"TetrisEngine","Progression","Catalog"}) do named("ModuleScript",name,Shared) end
-for _,name in ipairs({"Rules","SoundConfig"}) do named("ModuleScript",name,ConfigFolder) end
+for _,name in ipairs({"CosmeticsAssetIds","CosmeticsAssetMetadata","CosmeticsAssetResolver","UIAssetConfig","UIThemeConfig","DeveloperProductConfig","Rules","SoundConfig","BattleEffectsConfig","ShopPreviewConfig","DropEffectConfig","RankIconConfig","CurrencyIconConfig","BrickSkinConfig","GhostEffectConfig"}) do named("ModuleScript",name,ConfigFolder) end
 local Network=named("RemoteEvent","Network",Shared); Network.OnClientEvent=signal()
 local requests={}; function Network:FireServer(kind,payload) table.insert(requests,{Kind=kind,Payload=payload}) end
 local PlayerGui=named("Folder","PlayerGui")
@@ -79,12 +83,12 @@ local TextService={GetTextSize=function(_,value,size,_,bounds)
 	local lines=0; for _,line in ipairs(string.split(value,"\n")) do lines+=math.max(1,math.ceil(#line*size*0.55/bounds.X)) end
 	return Vector2.new(bounds.X,lines*size*1.2)
 end}
-local services={Players=Players,ReplicatedStorage=ReplicatedStorage,UserInputService=UIS,GuiService={},RunService=RunService,ContextActionService=CAS,SoundService=SoundService,TweenService=TweenService,TextService=TextService,ContentProvider={},SocialService={}}
+local services={Players=Players,ReplicatedStorage=ReplicatedStorage,UserInputService=UIS,GuiService={},RunService=RunService,ContextActionService=CAS,SoundService=SoundService,TweenService=TweenService,TextService=TextService,ContentProvider={PreloadAsync=function(_,uris,callback) for _,uri in ipairs(uris) do callback(uri,Enum.AssetFetchStatus.Success) end end},SocialService={}}
 local game=setmetatable({GetService=function(_,name) return assert(services[name],"Unknown service "..name) end},{__index=services})
 local workspace={GetServerTimeNow=function() return 1791590400 end}
 local clientFolder=named("Folder","Client")
-for _,name in ipairs({"RetroTheme","RetroArtwork","BrickStyles","BrickRenderer","BrickPreviewRenderer","NeonUI","NeonLayout","GameClient","PortalUI","AudioController","InputController","CosmeticRenderer"}) do named("ModuleScript",name,clientFolder) end
+for _,name in ipairs({"TextureDiagnostics","RenderLayers","CosmeticsAssets","UIAssets","RetroTheme","RetroArtwork","BrickStyles","BrickRenderer","BrickPreviewRenderer","NeonUI","NeonLayout","GameClient","ArcadeFeedback","ArcadeResults","PortalUI","AudioController","InputController","CosmeticRenderer"}) do named("ModuleScript",name,clientFolder) end
 local script={Parent=clientFolder}
-local modules={TetrisEngine=E,Rules=R,Progression=P,SoundConfig=SoundConfig,Catalog=Catalog}
+local modules={CosmeticsAssetIds=CosmeticsAssetIds,CosmeticsAssetMetadata=CosmeticsAssetMetadata,CosmeticsAssetResolver=CosmeticsAssetResolver,UIAssetConfig=UIAssetConfig,UIThemeConfig=UIThemeConfig,DeveloperProductConfig=DeveloperProductConfig,TetrisEngine=E,Rules=R,Progression=P,SoundConfig=SoundConfig,Catalog=Catalog,BattleEffectsConfig=BattleEffectsConfig,ShopPreviewConfig=ShopPreviewConfig,DropEffectConfig=DropEffectConfig,RankIconConfig=RankIconConfig,CurrencyIconConfig=CurrencyIconConfig,BrickSkinConfig=BrickSkinConfig,GhostEffectConfig=GhostEffectConfig}
 local require=function(obj) return assert(modules[type(obj)=="string" and obj or obj.Name],"Unknown module") end
 local warn=print

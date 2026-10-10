@@ -1,20 +1,10 @@
-local Catalog={Items={},Categories={"BrickSkins","DropEffects","GhostEffects","SoundPacks"},Slots={BrickSkins="BrickSkin",DropEffects="DropEffect",GhostEffects="GhostEffect",SoundPacks="SoundPack"}}
-local sets={
-	BrickSkins={"Default Classic","Neon Club","Cyber Core","Ocean Wave","Galaxy","Gold Elite","Lava","Crystal Glass","Retro Pixel","Holographic"},
-	DropEffects={"Default","Neon Sparks","Lightning Strike","Stardust","Fire Burst","Pixel Explosion","Crystal Shatter","Cyber Glitch"},
-	GhostEffects={"Default Outline","Neon Outline","Hologram","Pulse","Glitch","Prism","Electric"},
-	SoundPacks={"Default","Retro Arcade","Cyber","Crystal","Neon Club"},
-}
+local Definition=if game then require(game:GetService("ReplicatedStorage"):WaitForChild("Shared"):WaitForChild("Config"):WaitForChild("CosmeticConfig")) else require("./Config/CosmeticConfig")
+local Catalog={Items={},Categories={"BrickSkins","DropEffects","GhostEffects","SoundPacks"},Slots={BrickSkins="BrickSkin",DropEffects="DropEffect",GhostEffects="GhostEffect",SoundPacks="SoundPack"},Prices=Definition.Prices}
 local hues={{0.15,0.9,1},{0.7,0.4,1},{0.1,0.7,1},{0.8,0.5,1},{1,0.8,0.2},{1,0.3,0.1},{0.7,0.9,1}}
-for category,names in pairs(sets) do
-	for index,name in ipairs(names) do
-		local id=index==1 and "Default" or name:gsub("%s","")
-		local item={Id=id,Name=name,Category=category,Rarity=index<4 and "Common" or (index<7 and "Rare" or "Epic"),Price=index==1 and 0 or (index-1)*175,
-			Description="Cosmetic only. Changes appearance or sound; never gameplay.",Preview={Kind="T",Color=hues[(index-1)%#hues+1]},
-			Visual={Tint=index==1 and nil or hues[(index-1)%#hues+1],Blend=0.12+(index%3)*0.08,Border=index%2==0,Transparency=category=="GhostEffects" and (0.72+(index%3)*0.05) or 0,Effect=index},
-			Audio={Pack=id},
-		}
-		Catalog.Items[category..":"..id]=item
+for category,rows in pairs(Definition.Collections) do
+	for index,definition in ipairs(rows) do
+		local item=table.clone(definition); item.Category=category; item.Description="Cosmetic only. Shared live-board renderer; no gameplay advantages."
+		item.Preview={Kind="T",Color=hues[(index-1)%#hues+1]}; item.Visual={Blend=0,Transparency=0,Effect=index}; item.Audio={Pack=item.Id}; Catalog.Items[category..":"..item.Id]=item
 	end
 end
 function Catalog.list(category)

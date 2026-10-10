@@ -1,0 +1,12 @@
+{
+  "name": "TetrisBattleUIAssets",
+  "tree": {
+    "$className": "DataModel",
+    "ReplicatedStorage": {
+      "$className": "ReplicatedStorage",
+      "UIAssetConfig": {
+        "$path": "src/ReplicatedStorage/UIAssetConfig.luau"
+      }
+    }
+  }
+}

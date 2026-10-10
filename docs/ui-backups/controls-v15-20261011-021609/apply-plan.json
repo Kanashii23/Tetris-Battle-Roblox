@@ -1,0 +1,17 @@
+[
+  {
+    "stagedSha256": "54390d963b1f45ce1f58bd3b4ff48e02dc1ef1168741016322a0d8819f1a2c4b",
+    "path": "src/client/InputController.luau",
+    "originalSha256": "b37b923f543d3afe0a9c7108db588cade288b2e213fb675521bc4bcfb61af28b"
+  },
+  {
+    "stagedSha256": "f6ffcf94d0aea3753291875d34c4ac2112c2fcf342127094f29725fca613116d",
+    "path": "src/client/PortalUI.luau",
+    "originalSha256": "2154bf95b208ee334b4c7bccf8f732cba4bebc0439eccd712bfb58026c350884"
+  },
+  {
+    "stagedSha256": "818b7a3ee63489a5d21cec9c9d118d170cab71813a74b52d9de4d3476a8cb10e",
+    "path": "src/client/TetrisUI.client.luau",
+    "originalSha256": "7395f5c5f7478d0f3ce4c3231d6115f39a6307db0cf4db29c84088e2ac4d7ae9"
+  }
+]

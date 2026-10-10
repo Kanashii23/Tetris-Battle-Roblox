@@ -6,7 +6,7 @@ assert(table.find(pa.UserIds,101)); assert(records[ns]["101"].Data.Cash==0)
 assert(next(ProfileStore.Test().MockStore)==nil and next(ProfileStore.Test().UserMockStore)==nil)
 print("PASS supplied ProfileStore creates distinct active sessions with user IDs and real-backend API calls")
 assert(Data:mutate(a,function(d)
-	d.Cash=5000; d.Rank={Tier=3,Stars=2,Rating=1345}; d.Stats.Wins=9; d.Stats.Losses=4; d.Stats.CurrentWinStreak=3; d.Stats.BestWinStreak=6
+	d.Cash=125000; d.Rank={Tier=3,Stars=2,Rating=1345}; d.Stats.Wins=9; d.Stats.Losses=4; d.Stats.CurrentWinStreak=3; d.Stats.BestWinStreak=6
 	d.Season.Rating=1500; d.Season.Wins=5; d.Quests.Daily.Progress.lines=24; d.Quests.Weekly.Progress.wins=8
 	d.Login.Index=4; d.Login.LastDay=math.floor(os.time()/86400); d.Achievements.Test=true; d.Inventory.Badges.Test=true; d.Settings.ReducedMotion=true; d.Settings.Sound=false
 	d.Energy.Current=3; d.Energy.LastRegenTimestamp=os.time(); return true
@@ -87,13 +87,13 @@ local reservation=player(809); assert(Data:load(reservation)); assert(Data:mutat
 Data:release(reservation); assert(Data:load(reservation)); assert(Data:get(reservation).Energy.Current==9 and not next(Data:get(reservation).Reservations))
 Data:release(reservation); assert(Data:load(reservation)); assert(Data:get(reservation).Energy.Current==9)
 print("PASS abandoned energy reservations refund once and remain cleared after rejoin")
-local purchase=player(909); assert(Data:load(purchase)); assert(Data:mutate(purchase,function(d) d.Cash=1000; return true end))
+local purchase=player(909); assert(Data:load(purchase)); assert(Data:mutate(purchase,function(d) d.Cash=125000; return true end))
 faults.Writes[ns]=true; local skin=Catalog.list("BrickSkins")[2]
 assert(not async(function() return Data:mutate(purchase,function(d) return P.purchase(d,"BrickSkins",skin.Id,Catalog,false) end) end,4))
 assert(not Data:get(purchase) and purchase.Kicked and not Data:mutate(purchase,function(d) d.Cash+=999; return true end))
 faults.Writes[ns]=nil; tick(5); assert(Data:load(purchase))
 local recoveredPurchase=Data:get(purchase)
-assert(recoveredPurchase.Cash==1000-skin.Price and recoveredPurchase.Inventory.BrickSkins[skin.Id])
+assert(recoveredPurchase.Cash==125000-skin.Price and recoveredPurchase.Inventory.BrickSkins[skin.Id])
 assert(not Data:mutate(purchase,function(d) return P.purchase(d,"BrickSkins",skin.Id,Catalog,false) end))
 print("PASS ambiguous save failure closes access and preserves the atomic Cash/ownership pair without free or duplicate items")
 local duplicate=player(909); assert(not Data:load(duplicate)); assert(Data:get(purchase) and not Data:get(duplicate))

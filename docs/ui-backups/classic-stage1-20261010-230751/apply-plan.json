@@ -1,0 +1,332 @@
+[
+  {
+    "path": "src\\client\\BrickPreviewRenderer.luau",
+    "originalSha256": "82c3d9e39aadb54d06124ab88b774e2073980ec16c7181814295c40454e9b794",
+    "stagedSha256": "0c0ca479d0d0745b0486d7e8d6444636b60574dfca54df51472e9b2ac39a876a"
+  },
+  {
+    "path": "src\\client\\BrickRenderer.luau",
+    "originalSha256": "1990d5c45bf0ce5d3fe5f354938672fe1f553293fa4cce3a363f96f75737acba",
+    "stagedSha256": "0db35a5930aa310ab776db6f35f11671ee7f42f4c1be8c848c20e5d50902a467"
+  },
+  {
+    "path": "src\\client\\CosmeticRenderer.luau",
+    "originalSha256": "7315d8d45cbbac51c1c3ea9c2f02c4117aebda62dcd1e740573b41df1aec6246",
+    "stagedSha256": "9460044fef1e61e44912e31d72d99c2afe731b056c4741f3fcf8efb798c40a48"
+  },
+  {
+    "path": "src\\client\\CosmeticsAssets.luau",
+    "originalSha256": null,
+    "stagedSha256": "f0368b35b38581b1ec46c8b6e5324c1793212f9578c1f2f4aa20ed23a68ddd3e"
+  },
+  {
+    "path": "src\\client\\GameClient.luau",
+    "originalSha256": "7c427884b681432d69c85a77d872d7cd10887d6c10a0943c2f829070fefb7d52",
+    "stagedSha256": "769414a2a5e27b0e8037e9a84bc72105cb96912b4800b08580b5f2283117fb9d"
+  },
+  {
+    "path": "src\\client\\NeonLayout.luau",
+    "originalSha256": "2fd23940d96e93a6be63043dbc6210157d38590d43f9342acf729aa4ceb8e994",
+    "stagedSha256": "35068876f2ca46286d886c7ae403b6eff3aac69f841ef7a0de00ec6fbaf5b8b3"
+  },
+  {
+    "path": "src\\client\\NeonUI.luau",
+    "originalSha256": "511bd7fbdf42a274026ed1c9dfe5a835cc3bb16f91867268022e407b1ff09c28",
+    "stagedSha256": "2708ac4d6451a2cfe1f1c0bab2206c5610f50febeeb0979a27392c70e217fcdf"
+  },
+  {
+    "path": "src\\client\\PortalUI.luau",
+    "originalSha256": "92a344b4be71f05da8e10df95d7fbe84531fe67c361d14a27d4f361f65e8be20",
+    "stagedSha256": "aa3b52a1b8e5eea5ca6da6e04110b05e41cb2d44e462e6e4dcf57deb50c51634"
+  },
+  {
+    "path": "src\\client\\RetroArtwork.luau",
+    "originalSha256": "a33a0826e5c4b641bbbfdfcfaa6fab867531d95fd8f554ebe90edf9061472ac0",
+    "stagedSha256": "420f1d1c0511f1b4685702c77276f2f1143c491e714cf628d6078cd200122171"
+  },
+  {
+    "path": "src\\client\\TetrisUI.client.luau",
+    "originalSha256": "bed43505b248a8ce20c2d07293654ddd09288da0b4dccc5c14d508fe0398df6e",
+    "stagedSha256": "ea0c5f02d1329f4b91406b322205396d1b0d9c36f8378363899d15411574fe3c"
+  },
+  {
+    "path": "src\\shared\\Config\\BrickSkinConfig.luau",
+    "originalSha256": "229cdfd620f90862c40aa7814f45a85d1c67f556a5ec086f0908c0ae141c012c",
+    "stagedSha256": "d83b32bcd940da451a58e325e176f0e686d086b65beda39984b01bae7cebf2f5"
+  },
+  {
+    "path": "src\\shared\\Config\\CosmeticConfig.luau",
+    "originalSha256": "90a598a22154c26b1286bb02de633cb619e07c776a4f3e8d272daba74f09ea64",
+    "stagedSha256": "f8b6dcf4a2a154ae6db18a786a55be12a1d49f7c0ed69ae61fe204d99dc0263c"
+  },
+  {
+    "path": "src\\shared\\Config\\CosmeticsAssetIds.luau",
+    "originalSha256": null,
+    "stagedSha256": "3270679687db11f42a0a30f90f91d38707f254d3a2ae237e8995d5d69540d82d"
+  },
+  {
+    "path": "src\\shared\\Config\\DropEffectConfig.luau",
+    "originalSha256": "ad1f9f464c70745eab3f33ea8568cc72ae92032aada6c1e8522fd0a47719fcd4",
+    "stagedSha256": "498240d900a5d580158bf2586266f0c789952e3993718f6c16bc2d37274a1968"
+  },
+  {
+    "path": "src\\shared\\Config\\GhostEffectConfig.luau",
+    "originalSha256": "314348865aa5d17d987f7d00c6b5e467828e59347a167a1ebbfb2de4072237a0",
+    "stagedSha256": "b203cf339d9af67f38d02c451e2f5f9dec3569e7eb99a5ca777adb3f14596f7f"
+  },
+  {
+    "path": "tests\\build-harnesses.js",
+    "originalSha256": "bdd623e8c5bc335eb2736000af2dc282fbd3bd2d62e39c3016867d1aa2721426",
+    "stagedSha256": "6af91a252cb2683a4b667abd53db1daab46c6148889d296411bd836b82bace1f"
+  },
+  {
+    "path": "tests\\ProfileStoreHarness.luau",
+    "originalSha256": "246523f37147eafc2e4e8b07e8cf90ab6195f2bd62b053a375085b2f27f5f1c4",
+    "stagedSha256": "dd88de870d6a7aa23b9325072ab8cfb4fecb82952cce63f4e68497578e7a1ca2"
+  },
+  {
+    "path": "tests\\ServerHarness.luau",
+    "originalSha256": "e025beb335a4d4e2828a0ae77f77f48c5eeb8eead658d92dd253e97e47410851",
+    "stagedSha256": "b5cf76ee737c5855916c3a5786281724c0fd01ff1f1188f29e4bcad1c8808916"
+  },
+  {
+    "path": "tests\\UIHarness.luau",
+    "originalSha256": "58b71349f416fcd1c5ef7ee7647f4c7375a57fee33ebb15b3b16f61ec7694285",
+    "stagedSha256": "8ccdfb8f5d2ea749b7668be027c0bb7989dd7957bd14a904580441eed003dbec"
+  },
+  {
+    "path": "tests\\verify-classic-assets.py",
+    "originalSha256": null,
+    "stagedSha256": "da604d1a385fa9c356996ba06f123856bc0f661f2a13937c0c2cf0766c2dffe8"
+  },
+  {
+    "path": "tests\\fixtures\\classic-stage-checks.luau",
+    "originalSha256": null,
+    "stagedSha256": "1f0693c2b3356a95f26dfe4c665291953b19ad3f2432f0927ca22b30a369237e"
+  },
+  {
+    "path": "tests\\fixtures\\ui-checks.luau",
+    "originalSha256": "85e003125bd5bef16ec168be69e6a4b52d222b0e2401cd3bc446f6fdeea36ea0",
+    "stagedSha256": "b25b9a3b5e28d61b2c9b46d387b58ec3eb53472807ee1d60cb4367f6b6662c74"
+  },
+  {
+    "path": "tests\\fixtures\\ui-mocks.luau",
+    "originalSha256": "7d3e5dafd851019a536600c2f46784c1a4d7d0fe0c61474d5be4edb948c6b049",
+    "stagedSha256": "2ae77aa706b696cd4e166271b6dce4cbf00726b9475d142eb9fa71c055d2b505"
+  },
+  {
+    "path": "docs\\CLASSIC-STAGE1-REPORT.md",
+    "originalSha256": null,
+    "stagedSha256": "2fe3a5819dfeb635dd53365297c992e73f1da0b0abdac9f598357b19859458be"
+  },
+  {
+    "path": "docs\\COSMETICS_UPLOAD_GUIDE.md",
+    "originalSha256": null,
+    "stagedSha256": "5f5e76105b0b54c6d5c78332940de0784b9b4b17c36253fd31188b7c8f9a05ef"
+  },
+  {
+    "path": "assets\\cosmetics\\NormalizedManifest.json",
+    "originalSha256": null,
+    "stagedSha256": "7c456085b6569ce785208c61f8ea692e11478072c5321f47eb20a1b280ea0cbb"
+  },
+  {
+    "path": "assets\\cosmetics\\DefaultClassic_ExactTemplate_7Colors\\AssetManifest.json",
+    "originalSha256": null,
+    "stagedSha256": "8aa329d4db595bb7bd796192f9c4adafdfb4227d1f79745d739cdfdfe4191630"
+  },
+  {
+    "path": "assets\\cosmetics\\DefaultClassic_ExactTemplate_7Colors\\README.md",
+    "originalSha256": null,
+    "stagedSha256": "85de234268aee2330d0f95d2012cac42b78e6f9785022ced192971dc36f86093"
+  },
+  {
+    "path": "assets\\cosmetics\\DefaultClassic_ExactTemplate_7Colors\\ValidationReport.json",
+    "originalSha256": null,
+    "stagedSha256": "798cc86d19674c58b91626076b0c89d9a8a0bcacbb77e97b783d9e1885206486"
+  },
+  {
+    "path": "assets\\cosmetics\\DefaultClassic_ExactTemplate_7Colors\\Previews\\SevenColorAnimation.gif",
+    "originalSha256": null,
+    "stagedSha256": "401992f9f9cfcdfca3332673efa1dd6802daa72db437b2b8d771ee99f9438d45"
+  },
+  {
+    "path": "assets\\cosmetics\\DefaultClassic_ExactTemplate_7Colors\\Previews\\SevenColorComparison.png",
+    "originalSha256": null,
+    "stagedSha256": "ad31cde900e45fc0a51cabc71483ac5d3781ad059b4b5bfd26f42172ad01b120"
+  },
+  {
+    "path": "assets\\cosmetics\\DefaultClassic_ExactTemplate_7Colors\\GhostFX\\DefaultClassic\\I.png",
+    "originalSha256": null,
+    "stagedSha256": "de128f5bc25bc2305ccf1b999f73ebdc1179eb1aeb99a95b6bed46fdad189133"
+  },
+  {
+    "path": "assets\\cosmetics\\DefaultClassic_ExactTemplate_7Colors\\GhostFX\\DefaultClassic\\J.png",
+    "originalSha256": null,
+    "stagedSha256": "8bf19ddf0f598b9ea59351644fabd8a310ad64087d7d126868e3046046a5636d"
+  },
+  {
+    "path": "assets\\cosmetics\\DefaultClassic_ExactTemplate_7Colors\\GhostFX\\DefaultClassic\\L.png",
+    "originalSha256": null,
+    "stagedSha256": "c4ea17d1084e27bc7c2a497513a1a9eb7c79736ac1fa3e16096dad6202298980"
+  },
+  {
+    "path": "assets\\cosmetics\\DefaultClassic_ExactTemplate_7Colors\\GhostFX\\DefaultClassic\\O.png",
+    "originalSha256": null,
+    "stagedSha256": "0cab1c8a20817f1cbf0a4ab3c4e9a6cc4d1154ad1f2f35036d1f3d40d50e859e"
+  },
+  {
+    "path": "assets\\cosmetics\\DefaultClassic_ExactTemplate_7Colors\\GhostFX\\DefaultClassic\\S.png",
+    "originalSha256": null,
+    "stagedSha256": "5d8f6c1dd3beeeace91cd7e15cebaa4a7d853c4f295a92e025a1ad3854790e39"
+  },
+  {
+    "path": "assets\\cosmetics\\DefaultClassic_ExactTemplate_7Colors\\GhostFX\\DefaultClassic\\T.png",
+    "originalSha256": null,
+    "stagedSha256": "a577f4efc344ea946458c9391769115fc6c43cb31ab413cfe2c47ca1551d0120"
+  },
+  {
+    "path": "assets\\cosmetics\\DefaultClassic_ExactTemplate_7Colors\\GhostFX\\DefaultClassic\\Z.png",
+    "originalSha256": null,
+    "stagedSha256": "94f20ce3abe512d8922ef36c40c3f9048f6c5f7bafdb5cc30eefa96b3d63dde7"
+  },
+  {
+    "path": "assets\\cosmetics\\DefaultClassic_ExactTemplate_7Colors\\DropFX\\DefaultClassic\\I\\Droplet.png",
+    "originalSha256": null,
+    "stagedSha256": "6eaef0a220e664e3f51b1df7e4abccca6f4830cf3b25b82d104309b88701f6d5"
+  },
+  {
+    "path": "assets\\cosmetics\\DefaultClassic_ExactTemplate_7Colors\\DropFX\\DefaultClassic\\I\\Ripple.png",
+    "originalSha256": null,
+    "stagedSha256": "54dbb732c1af5d64383b0e6b93da80aa5db0e97e5fd4bb2f8c3480eaf23730d1"
+  },
+  {
+    "path": "assets\\cosmetics\\DefaultClassic_ExactTemplate_7Colors\\DropFX\\DefaultClassic\\I\\WhiteBase.png",
+    "originalSha256": null,
+    "stagedSha256": "68f1f588e5759f247266907af922793a9fe2b09d2ca77b722ed3b5e1c46a9daa"
+  },
+  {
+    "path": "assets\\cosmetics\\DefaultClassic_ExactTemplate_7Colors\\DropFX\\DefaultClassic\\J\\Droplet.png",
+    "originalSha256": null,
+    "stagedSha256": "fbf6e7512a93c5f31da8426d536c7a452558ad53eef03ff2bed9a50faa57444d"
+  },
+  {
+    "path": "assets\\cosmetics\\DefaultClassic_ExactTemplate_7Colors\\DropFX\\DefaultClassic\\J\\Ripple.png",
+    "originalSha256": null,
+    "stagedSha256": "8aae9cb17c554c63ed50448d0c4bc0c95317b7d72b753bc3baffb4e7923f35ad"
+  },
+  {
+    "path": "assets\\cosmetics\\DefaultClassic_ExactTemplate_7Colors\\DropFX\\DefaultClassic\\J\\WhiteBase.png",
+    "originalSha256": null,
+    "stagedSha256": "cd6bcd3626b4d6ec01f7c1b87d9839c5512ced18e9bd2447f0dd232745c50ba2"
+  },
+  {
+    "path": "assets\\cosmetics\\DefaultClassic_ExactTemplate_7Colors\\DropFX\\DefaultClassic\\L\\Droplet.png",
+    "originalSha256": null,
+    "stagedSha256": "eb3f9bdf8f771902e5d3ebcf038ad785cf081afa8e05b1aa4a6ca8a3b3f50f72"
+  },
+  {
+    "path": "assets\\cosmetics\\DefaultClassic_ExactTemplate_7Colors\\DropFX\\DefaultClassic\\L\\Ripple.png",
+    "originalSha256": null,
+    "stagedSha256": "ac18013b48b6ffcc1b5b5ef2c07e0a456448793526ccfa2743cadb195fdb6b34"
+  },
+  {
+    "path": "assets\\cosmetics\\DefaultClassic_ExactTemplate_7Colors\\DropFX\\DefaultClassic\\L\\WhiteBase.png",
+    "originalSha256": null,
+    "stagedSha256": "04983465bebc5dd53c6cf0d540dcd106301c85f84c72434b50b07c589bd31ba6"
+  },
+  {
+    "path": "assets\\cosmetics\\DefaultClassic_ExactTemplate_7Colors\\DropFX\\DefaultClassic\\O\\Droplet.png",
+    "originalSha256": null,
+    "stagedSha256": "12e22c330715ea880588eb117effe6dc728fab2bd894a2ac3c538c81e4be902a"
+  },
+  {
+    "path": "assets\\cosmetics\\DefaultClassic_ExactTemplate_7Colors\\DropFX\\DefaultClassic\\O\\Ripple.png",
+    "originalSha256": null,
+    "stagedSha256": "3962ec230095c3843c523855519523056cefb01f585dc35e572db4b9ee70b28c"
+  },
+  {
+    "path": "assets\\cosmetics\\DefaultClassic_ExactTemplate_7Colors\\DropFX\\DefaultClassic\\O\\WhiteBase.png",
+    "originalSha256": null,
+    "stagedSha256": "1e0bddefbc25be764da2d999c9b515a3996fed368d96166eb423a386fc4b54ef"
+  },
+  {
+    "path": "assets\\cosmetics\\DefaultClassic_ExactTemplate_7Colors\\DropFX\\DefaultClassic\\S\\Droplet.png",
+    "originalSha256": null,
+    "stagedSha256": "f00644b8bc4749b4c3ece955a8699abb0cb8314a9af53397da12aa6a3434f36b"
+  },
+  {
+    "path": "assets\\cosmetics\\DefaultClassic_ExactTemplate_7Colors\\DropFX\\DefaultClassic\\S\\Ripple.png",
+    "originalSha256": null,
+    "stagedSha256": "a2b517a1cc197af9df2815e77b1ce4fb49cff432e46afb1d7c3895e18c2b6dd5"
+  },
+  {
+    "path": "assets\\cosmetics\\DefaultClassic_ExactTemplate_7Colors\\DropFX\\DefaultClassic\\S\\WhiteBase.png",
+    "originalSha256": null,
+    "stagedSha256": "6afa3a4cccf0b36a223a1520694cbede403fabb71e99fb012c32ccabfe4c9ef7"
+  },
+  {
+    "path": "assets\\cosmetics\\DefaultClassic_ExactTemplate_7Colors\\DropFX\\DefaultClassic\\T\\Droplet.png",
+    "originalSha256": null,
+    "stagedSha256": "095434f75f21c14de7dc49e230df4cf89ec3e18fcd9bbe5f8a044e478d554ede"
+  },
+  {
+    "path": "assets\\cosmetics\\DefaultClassic_ExactTemplate_7Colors\\DropFX\\DefaultClassic\\T\\Ripple.png",
+    "originalSha256": null,
+    "stagedSha256": "3636aa1028b686b79b57df482ada0b6bc00e6b7048ea8c3f70647634530266fb"
+  },
+  {
+    "path": "assets\\cosmetics\\DefaultClassic_ExactTemplate_7Colors\\DropFX\\DefaultClassic\\T\\WhiteBase.png",
+    "originalSha256": null,
+    "stagedSha256": "cb4a9017e178b9a7255cde09b12e552e679cf3ea552149eb10410eca3129299e"
+  },
+  {
+    "path": "assets\\cosmetics\\DefaultClassic_ExactTemplate_7Colors\\DropFX\\DefaultClassic\\Z\\Droplet.png",
+    "originalSha256": null,
+    "stagedSha256": "a706d5606146e522b3562d8e47268a9c6ae0da5003e0481612ad821459f24858"
+  },
+  {
+    "path": "assets\\cosmetics\\DefaultClassic_ExactTemplate_7Colors\\DropFX\\DefaultClassic\\Z\\Ripple.png",
+    "originalSha256": null,
+    "stagedSha256": "e9920aa9a149ffe3f42278978fa569e5e59b5018b8026c79a6637a1dd3c99626"
+  },
+  {
+    "path": "assets\\cosmetics\\DefaultClassic_ExactTemplate_7Colors\\DropFX\\DefaultClassic\\Z\\WhiteBase.png",
+    "originalSha256": null,
+    "stagedSha256": "cca00ec8df654a18d195349f04a13b65be171ceef258a5adb023f20a94b661f4"
+  },
+  {
+    "path": "assets\\cosmetics\\DefaultClassic_ExactTemplate_7Colors\\Bricks\\DefaultClassic\\I.png",
+    "originalSha256": null,
+    "stagedSha256": "581581d0689374611d3bef4388e45b61abcfe0755c12bc8a747dc6e8e86172e4"
+  },
+  {
+    "path": "assets\\cosmetics\\DefaultClassic_ExactTemplate_7Colors\\Bricks\\DefaultClassic\\J.png",
+    "originalSha256": null,
+    "stagedSha256": "41d25a88cb99f66421bba0634599114a088fc7ce71528083b9a5af817f56e01d"
+  },
+  {
+    "path": "assets\\cosmetics\\DefaultClassic_ExactTemplate_7Colors\\Bricks\\DefaultClassic\\L.png",
+    "originalSha256": null,
+    "stagedSha256": "bf8a779a04ae220e2396f95c1b0407064c444281152c8777b9e0023e663bbbc5"
+  },
+  {
+    "path": "assets\\cosmetics\\DefaultClassic_ExactTemplate_7Colors\\Bricks\\DefaultClassic\\O.png",
+    "originalSha256": null,
+    "stagedSha256": "0788b5b79da0216b878d51af1c3fc95dd78d3464e3911bb97354dc7a8f6677b9"
+  },
+  {
+    "path": "assets\\cosmetics\\DefaultClassic_ExactTemplate_7Colors\\Bricks\\DefaultClassic\\S.png",
+    "originalSha256": null,
+    "stagedSha256": "10c2b2bacc0b26e2b6d88efa781d01d907416e7e11014f39952a4bf7b3adb5a0"
+  },
+  {
+    "path": "assets\\cosmetics\\DefaultClassic_ExactTemplate_7Colors\\Bricks\\DefaultClassic\\T.png",
+    "originalSha256": null,
+    "stagedSha256": "bd75c5176a9ea57f189e1f792f39511cebc76ceb66bd321d60b9670e68668eb2"
+  },
+  {
+    "path": "assets\\cosmetics\\DefaultClassic_ExactTemplate_7Colors\\Bricks\\DefaultClassic\\Z.png",
+    "originalSha256": null,
+    "stagedSha256": "f6d64ba271360e1a8464577f6b2a340180973313fc756e507a575198962ffeb6"
+  }
+]

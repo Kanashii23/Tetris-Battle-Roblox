@@ -1,0 +1,137 @@
+[
+  {
+    "path": "src/client/CosmeticsAssets.luau",
+    "originalSha256": "f0368b35b38581b1ec46c8b6e5324c1793212f9578c1f2f4aa20ed23a68ddd3e",
+    "stagedSha256": "2964389b54508f2e98ca4ecc3e35e9cacbf9574668188b7dabfa23e08856469d"
+  },
+  {
+    "path": "src/client/NeonLayout.luau",
+    "originalSha256": "35068876f2ca46286d886c7ae403b6eff3aac69f841ef7a0de00ec6fbaf5b8b3",
+    "stagedSha256": "f56bec7ced68849a1ab7364808e5433bcc62b22a0a88dc8e4ceb143eafbc40d5"
+  },
+  {
+    "path": "src/client/NeonUI.luau",
+    "originalSha256": "2708ac4d6451a2cfe1f1c0bab2206c5610f50febeeb0979a27392c70e217fcdf",
+    "stagedSha256": "2b79edf310d81491b6ae36617091e3d29d8863cf60339070a616c6088478ddc4"
+  },
+  {
+    "path": "src/client/PortalUI.luau",
+    "originalSha256": "aa3b52a1b8e5eea5ca6da6e04110b05e41cb2d44e462e6e4dcf57deb50c51634",
+    "stagedSha256": "fdc087cd3a55e6a4d2ee643b7fa4ebbe8ee81f9d588b00dff00a8e61317918f4"
+  },
+  {
+    "path": "src/client/RetroArtwork.luau",
+    "originalSha256": "420f1d1c0511f1b4685702c77276f2f1143c491e714cf628d6078cd200122171",
+    "stagedSha256": "7dd06e19eebb03cd9f3045fba04febb4f76194c6502c09bd0cace5346cba98bc"
+  },
+  {
+    "path": "src/client/TetrisUI.client.luau",
+    "originalSha256": "ea0c5f02d1329f4b91406b322205396d1b0d9c36f8378363899d15411574fe3c",
+    "stagedSha256": "c72ea446d4b863e49b92cf407b0e0aea4bf27f6cc3d7345167b49e1525377676"
+  },
+  {
+    "path": "src/client/UIAssets.luau",
+    "originalSha256": "1392b97d41c4be7eb941e31c8136a85d4df5258dbae20f5eaecff2a275a45f52",
+    "stagedSha256": "1aea222b2ce4e5d569a2e161b7af5061d94d9cb50f618ac9a1ee3244b4fe1b62"
+  },
+  {
+    "path": "src/shared/Config/BrickSkinConfig.luau",
+    "originalSha256": "d83b32bcd940da451a58e325e176f0e686d086b65beda39984b01bae7cebf2f5",
+    "stagedSha256": "fd32913bfa2e61e74f7cb39299b760a35c0c2cb81f390de88d66f13ad84b0327"
+  },
+  {
+    "path": "src/shared/Config/CosmeticConfig.luau",
+    "originalSha256": "f8b6dcf4a2a154ae6db18a786a55be12a1d49f7c0ed69ae61fe204d99dc0263c",
+    "stagedSha256": "aab5b8d31b359f8a3db2d359187e868245cde2fe2a435f7047bafa906d7c41ae"
+  },
+  {
+    "path": "src/shared/Config/CosmeticsAssetIds.luau",
+    "originalSha256": "3270679687db11f42a0a30f90f91d38707f254d3a2ae237e8995d5d69540d82d",
+    "stagedSha256": "c265b6605fd180689dee960273ee56a3d338292ec0ac5815d6bc99a588aef907"
+  },
+  {
+    "path": "src/shared/Config/CosmeticsAssetMetadata.luau",
+    "originalSha256": null,
+    "stagedSha256": "e9ff02670929714e02ea8b75406d2f414d4f1c7749a3e092394ba496fdc1257c"
+  },
+  {
+    "path": "src/shared/Config/CosmeticsAssetResolver.luau",
+    "originalSha256": null,
+    "stagedSha256": "e5cd4266f476a5b13f6172cae87ec9d04d62f452f356cd0de9c9b0316a9ad293"
+  },
+  {
+    "path": "src/shared/Config/DropEffectConfig.luau",
+    "originalSha256": "498240d900a5d580158bf2586266f0c789952e3993718f6c16bc2d37274a1968",
+    "stagedSha256": "7b24f5fa6c5b95d05dee7441c44b75f12e11a4fc4f27d8f8c193581e3d7602a5"
+  },
+  {
+    "path": "src/shared/Config/GhostEffectConfig.luau",
+    "originalSha256": "b203cf339d9af67f38d02c451e2f5f9dec3569e7eb99a5ca777adb3f14596f7f",
+    "stagedSha256": "d18deddc8f7b857a913654400491495587c8588ee0071e929dd44e1b6ffc1a99"
+  },
+  {
+    "path": "tests/build-harnesses.js",
+    "originalSha256": "6af91a252cb2683a4b667abd53db1daab46c6148889d296411bd836b82bace1f",
+    "stagedSha256": "a4c8dd2c3c0bd8fea3588455b9fb7e7d7feddd6a087f028ff8759dea55a48ac9"
+  },
+  {
+    "path": "tests/ProfileStoreHarness.luau",
+    "originalSha256": "dd88de870d6a7aa23b9325072ab8cfb4fecb82952cce63f4e68497578e7a1ca2",
+    "stagedSha256": "fa9a784dc00410e338aa22bf93af9e412af96852ac3a93145c31a073aa123a84"
+  },
+  {
+    "path": "tests/ServerHarness.luau",
+    "originalSha256": "b5cf76ee737c5855916c3a5786281724c0fd01ff1f1188f29e4bcad1c8808916",
+    "stagedSha256": "443982ca5915dcd6075f51e6f08bc20ab431f4de7d12acf75f81cceb84fe99d4"
+  },
+  {
+    "path": "tests/UIHarness.luau",
+    "originalSha256": "8ccdfb8f5d2ea749b7668be027c0bb7989dd7957bd14a904580441eed003dbec",
+    "stagedSha256": "b24de70faa2a7b9c7ab439c5830dc4b8f89e4552f1704870503ed9ee0db5b2be"
+  },
+  {
+    "path": "tests/fixtures/classic-stage-checks.luau",
+    "originalSha256": "1f0693c2b3356a95f26dfe4c665291953b19ad3f2432f0927ca22b30a369237e",
+    "stagedSha256": "c6409d049e8d3e15f36fbe6723e735e8367fa0a663de9399173938a021bd5bd7"
+  },
+  {
+    "path": "tests/fixtures/neon-rebuild-checks.luau",
+    "originalSha256": null,
+    "stagedSha256": "daaf5f3af9937a150a251e452ce1482055b67d194b79d8ddfb360e5ac89468b4"
+  },
+  {
+    "path": "tests/fixtures/reference-ui-checks.luau",
+    "originalSha256": "7c0a6c0e65aede66b8f10ed79cd24078f2a257436df3900b8261b7fcbe52f59b",
+    "stagedSha256": "6733537db7d7f3c1537e3bcf2c8dc41d3bfbdbb8547cfad3d8aefb0f9b690437"
+  },
+  {
+    "path": "tests/fixtures/ui-checks.luau",
+    "originalSha256": "b25b9a3b5e28d61b2c9b46d387b58ec3eb53472807ee1d60cb4367f6b6662c74",
+    "stagedSha256": "67955f87f532fd1e67cdec1f5bf245cfd26b3f3a5d3fa64019deb89874412926"
+  },
+  {
+    "path": "tests/fixtures/ui-mocks.luau",
+    "originalSha256": "2ae77aa706b696cd4e166271b6dce4cbf00726b9475d142eb9fa71c055d2b505",
+    "stagedSha256": "53e1c7c1cd65422d0319b6f082c1726b6d0b7e1a7faca4b9a05a69d15f9964c1"
+  },
+  {
+    "path": "tests/fixtures/ui-v3-checks.luau",
+    "originalSha256": "4a4fe3a65ab7f8726a01a5cbab7cbe6ca8da7bc3715a89f13bcf30fb730451e8",
+    "stagedSha256": "c64bbed70630429d1a79d300916fa4b689a2ce1f74899467ce98af231455fc2c"
+  },
+  {
+    "path": "assets/cosmetics/NormalizedManifest.json",
+    "originalSha256": "7c456085b6569ce785208c61f8ea692e11478072c5321f47eb20a1b280ea0cbb",
+    "stagedSha256": "8a479fab1250b319ed792d8fdeacf58639f3366350556c543461290812baec83"
+  },
+  {
+    "path": "docs/COSMETICS_UPLOAD_GUIDE.md",
+    "originalSha256": "5f5e76105b0b54c6d5c78332940de0784b9b4b17c36253fd31188b7c8f9a05ef",
+    "stagedSha256": "b7ea76b47b459bda3f02ff4c8a3bcc3ab01349cee7011cd6eb671d2f13ee974c"
+  },
+  {
+    "path": "docs/NEON-REBUILD-V5.md",
+    "originalSha256": null,
+    "stagedSha256": "11f80d1cd2925b85fa536f29d91d9f8916b2d4536f569cee7f69127ca0ab6dc1"
+  }
+]

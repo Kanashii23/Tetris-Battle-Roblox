@@ -1,7 +1,7 @@
 local a,b,c=player(1),player(2),player(3)
 Players.PlayerAdded:fire(a); Players.PlayerAdded:fire(b); Players.PlayerAdded:fire(c)
 local function send(p,kind,data) remote.OnServerEvent:fire(p,kind,data) end
-send(a,"Solo"); tick(0.2); assert(sent[a].State.Mode=="Solo" and #sent[a].State.Own.grid==200)
+send(a,"Solo"); local beforeMove=S.Sessions[a].Engine.piece.y; send(a,"Input",{Action="HardDrop",Down=true}); tick(0.2); assert(S.Sessions[a].Engine.piece.y==beforeMove); tick(R.Countdown); assert(sent[a].State.Mode=="Solo" and #sent[a].State.Own.grid==200)
 local y=S.Sessions[a].Engine.piece.y
 send(a,"Input",{Action="SoftDrop",Down=true}); tick(0.1); assert(S.Sessions[a].Engine.piece.y>y and S.Sessions[a].Engine.piece.rotation==0)
 send(a,"Input",{Action="SoftDrop",Down=false}); send(a,"Pause",true); y=S.Sessions[a].Engine.piece.y; tick(1); assert(S.Sessions[a].Engine.piece.y==y)
@@ -29,7 +29,7 @@ local opponent=E.unpack(sent[b].State.Opponent); assert(opponent.lines==4 and op
 send(a,"Input",{Action="invented",Down=true}); send(a,"Input",{Action="CW",Down="invalid"})
 assert(not sent[c].State or sent[c].State.Mode=="Solo")
 print("PASS authoritative garbage, actual opponent board and isolated replication")
-room.StartAt=now-25; room.Played=25; S.Sessions[b].Engine.alive=false; tick(0.1)
+room.StartAt=now-25; room.Played=25; S.Sessions[b].Engine.alive=false; tick(0.1); assert(S.Sessions[b].RespawnAt and not sent[a].Result); local kos=S.Sessions[a].Engine.stats.KOs; tick(0.5); assert(S.Sessions[a].Engine.stats.KOs==kos); tick(R.KORecovery); assert(S.Sessions[b].Engine.alive and not S.Sessions[b].RespawnAt); room.EndAt=now+0.05; tick(0.1)
 assert(sent[a].Result.Outcome=="Win" and sent[b].Result.Outcome=="Lose")
 assert(sent[a].Result.Own.stats.KOs==1 and sent[b].Result.Opponent.stats.KOs==1)
 assert(Data:get(a).Cash==50 and Data:get(a).Rank.Stars==1 and Data:get(a).Stats.QualifiedWins==1)
@@ -61,7 +61,7 @@ assert(Data:load(c)); assert(Data:get(c).Cash==50); assert(Data:load(c) and Data
 print("PASS durable pending result recovery blocks on failure and credits once on reconnect")
 -- Save rejection must not mutate cached balance or grant the item.
 local item=Catalog.list("BrickSkins")[2]
-Data:mutate(a,function(d) d.Cash=1000; return true end)
+Data:mutate(a,function(d) d.Cash=125000; return true end)
 local before=Data:get(a).Cash; failWrites=true
 task.spawn(function() Data:mutate(a,function(d) return P.purchase(d,item.Category,item.Id,Catalog,false) end) end)
 tick(5); failWrites=false

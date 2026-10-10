@@ -51,7 +51,7 @@ function E.new(seed,rules)
 	local s={rules=rules,board={},queue={},bagSeed=normalized,garbageSeed=(normalized+777)%2147483646+1,
 		alive=true,paused=false,elapsed=0,score=0,lines=0,level=1,combo=-1,b2b=false,hold=false,held=false,
 		pending={},controls={},horizontal=0,repeatTime=0,events={},sequence=0,
-		stats={TSpins=0,Tetrises=0,PerfectClears=0,Sent=0,KOs=0},
+		stats={TSpins=0,Tetrises=0,PerfectClears=0,Sent=0,KOs=0,BestCombo=0},
 	}
 	for y=1,rules.Height+rules.Hidden do s.board[y]=table.create(rules.Width,0) end
 	E.spawn(s); return s
@@ -131,6 +131,7 @@ function E.lock(s)
 	if continued then score=math.floor(score*s.rules.BackToBackScore); attack+=s.rules.BackToBackAttack; emit(s,"BackToBack") end
 	if cleared>0 then
 		s.combo+=1; if difficult then s.b2b=true else s.b2b=false end
+		s.stats.BestCombo=math.max(s.stats.BestCombo,s.combo)
 		score+=50*math.max(0,s.combo)*s.level
 		attack+=s.rules.ComboAttack[math.min(s.combo+1,#s.rules.ComboAttack)]
 		if s.combo>0 then emit(s,"Combo",{combo=s.combo}) end
@@ -161,7 +162,7 @@ function E.hardDrop(s)
 	local distance=0
 	while true do local p=table.clone(s.piece); p.y+=1; if not E.fits(s,p) then break end; s.piece=p; distance+=1 end
 	if distance>0 then s.spin=false end
-	s.score+=distance*2; emit(s,"HardDrop",{distance=distance}); return E.lock(s)
+	s.score+=distance*2; emit(s,"HardDrop",{distance=distance,x=s.piece.x,y=s.piece.y-s.rules.Hidden,kind=s.piece.kind,rotation=s.piece.rotation}); return E.lock(s)
 end
 function E.release(s)
 	s.controls={}; s.horizontal=0; s.repeatTime=0

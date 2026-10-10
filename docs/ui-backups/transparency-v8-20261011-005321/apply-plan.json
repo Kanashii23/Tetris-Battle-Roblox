@@ -1,0 +1,47 @@
+[
+  {
+    "path": "src/client/PortalUI.luau",
+    "originalSha256": "d474b65ae55075aa7f630764099ffd6876778c49016cee998ad2f8f5573ddd7a",
+    "stagedSha256": "36695dc5468da21a396268eeebd401133fdf31821870b4d055035dee65b302dd"
+  },
+  {
+    "path": "src/client/RetroArtwork.luau",
+    "originalSha256": "c3bee492e96e34429a65c1377068650c76a5f383d551622529ce15b3a9913a68",
+    "stagedSha256": "bdb31f05e84195d963a22157da8003fc5a87bb184dd024bf5f1eb0bca24074aa"
+  },
+  {
+    "path": "src/client/TetrisUI.client.luau",
+    "originalSha256": "318620e37853e282aeeba793241b6946b10fffcd41e9291ad9f8b742ffbae92b",
+    "stagedSha256": "b61b97e8ece885b6fb6af4a6c41e9bb745a9af4dda5ad68711b541f20b857c6e"
+  },
+  {
+    "path": "tests/build-harnesses.js",
+    "originalSha256": "953b60e1ac1a08493e354f8272676f5153b660b69b0db2086a775a5a63dd634b",
+    "stagedSha256": "beb642a1afe06ed9653a457f6eb3c488e5a8d7b9d9c9a3c0cf8df753eb8dff9a"
+  },
+  {
+    "path": "tests/UIHarness.luau",
+    "originalSha256": "2eeebcc1130b545448679652d3b647926a2f3502e29c68480b6ad78c40eebe4a",
+    "stagedSha256": "146b653d94214d119ba044ab3b21e613c0e9511d8bc07d38617c836962e0608f"
+  },
+  {
+    "path": "tests/fixtures/compact-v6-checks.luau",
+    "originalSha256": "8ed81d8beb2500567aced6793120bd60c52c0cd901d3de343084ab9dfdffbd19",
+    "stagedSha256": "a3b2c9539d5099d9b28cf8a44769312ec949a10c0aa9a91ee5ee148f41a3d37a"
+  },
+  {
+    "path": "tests/fixtures/targeted-v7-checks.luau",
+    "originalSha256": "c9cb7b9868f3c41ee654a703333d4b6c536e310ad50f64e7777eb58ed211b219",
+    "stagedSha256": "83bac66487523173d2e610344d69634bf426e96a4e5112ab18e72a32c6abcfcd"
+  },
+  {
+    "path": "tests/fixtures/transparency-v8-checks.luau",
+    "originalSha256": null,
+    "stagedSha256": "f60dc0f004e9506cc814dcaae6f4336dccc45fcf6c54ac7355a62cad2d44b9fb"
+  },
+  {
+    "path": "docs/TRANSPARENCY-UI-V8.md",
+    "originalSha256": null,
+    "stagedSha256": "085dc6e7a1dbb46439de7bac911eb023d09d8a0dd2b733752462d35726b52229"
+  }
+]

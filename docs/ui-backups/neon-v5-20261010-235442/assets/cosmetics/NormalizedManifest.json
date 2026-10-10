@@ -1,0 +1,532 @@
+{
+  "stage": 1,
+  "suppliedGameplayFiles": 35,
+  "futureThemeCount": 11,
+  "assets": [
+    {
+      "themeId": "DefaultClassic",
+      "tetrominoType": "I",
+      "color": "Cyan",
+      "category": "Bricks",
+      "component": null,
+      "file": "Bricks/DefaultClassic/I.png",
+      "dimensions": [
+        128,
+        128
+      ],
+      "robloxAssetId": "",
+      "sha256": "581581d0689374611d3bef4388e45b61abcfe0755c12bc8a747dc6e8e86172e4",
+      "configField": "Assets.Themes.DefaultClassic.I.Bricks"
+    },
+    {
+      "themeId": "DefaultClassic",
+      "tetrominoType": "I",
+      "color": "Cyan",
+      "category": "GhostFX",
+      "component": null,
+      "file": "GhostFX/DefaultClassic/I.png",
+      "dimensions": [
+        128,
+        128
+      ],
+      "robloxAssetId": "",
+      "sha256": "de128f5bc25bc2305ccf1b999f73ebdc1179eb1aeb99a95b6bed46fdad189133",
+      "configField": "Assets.Themes.DefaultClassic.I.GhostFX"
+    },
+    {
+      "themeId": "DefaultClassic",
+      "tetrominoType": "I",
+      "color": "Cyan",
+      "category": "DropFX",
+      "component": "WhiteBase",
+      "file": "DropFX/DefaultClassic/I/WhiteBase.png",
+      "dimensions": [
+        256,
+        256
+      ],
+      "robloxAssetId": "",
+      "sha256": "68f1f588e5759f247266907af922793a9fe2b09d2ca77b722ed3b5e1c46a9daa",
+      "configField": "Assets.Themes.DefaultClassic.I.DropFX.WhiteBase"
+    },
+    {
+      "themeId": "DefaultClassic",
+      "tetrominoType": "I",
+      "color": "Cyan",
+      "category": "DropFX",
+      "component": "Droplet",
+      "file": "DropFX/DefaultClassic/I/Droplet.png",
+      "dimensions": [
+        128,
+        128
+      ],
+      "robloxAssetId": "",
+      "sha256": "6eaef0a220e664e3f51b1df7e4abccca6f4830cf3b25b82d104309b88701f6d5",
+      "configField": "Assets.Themes.DefaultClassic.I.DropFX.Droplet"
+    },
+    {
+      "themeId": "DefaultClassic",
+      "tetrominoType": "I",
+      "color": "Cyan",
+      "category": "DropFX",
+      "component": "Ripple",
+      "file": "DropFX/DefaultClassic/I/Ripple.png",
+      "dimensions": [
+        512,
+        128
+      ],
+      "robloxAssetId": "",
+      "sha256": "54dbb732c1af5d64383b0e6b93da80aa5db0e97e5fd4bb2f8c3480eaf23730d1",
+      "configField": "Assets.Themes.DefaultClassic.I.DropFX.Ripple"
+    },
+    {
+      "themeId": "DefaultClassic",
+      "tetrominoType": "O",
+      "color": "Yellow",
+      "category": "Bricks",
+      "component": null,
+      "file": "Bricks/DefaultClassic/O.png",
+      "dimensions": [
+        128,
+        128
+      ],
+      "robloxAssetId": "",
+      "sha256": "0788b5b79da0216b878d51af1c3fc95dd78d3464e3911bb97354dc7a8f6677b9",
+      "configField": "Assets.Themes.DefaultClassic.O.Bricks"
+    },
+    {
+      "themeId": "DefaultClassic",
+      "tetrominoType": "O",
+      "color": "Yellow",
+      "category": "GhostFX",
+      "component": null,
+      "file": "GhostFX/DefaultClassic/O.png",
+      "dimensions": [
+        128,
+        128
+      ],
+      "robloxAssetId": "",
+      "sha256": "0cab1c8a20817f1cbf0a4ab3c4e9a6cc4d1154ad1f2f35036d1f3d40d50e859e",
+      "configField": "Assets.Themes.DefaultClassic.O.GhostFX"
+    },
+    {
+      "themeId": "DefaultClassic",
+      "tetrominoType": "O",
+      "color": "Yellow",
+      "category": "DropFX",
+      "component": "WhiteBase",
+      "file": "DropFX/DefaultClassic/O/WhiteBase.png",
+      "dimensions": [
+        256,
+        256
+      ],
+      "robloxAssetId": "",
+      "sha256": "1e0bddefbc25be764da2d999c9b515a3996fed368d96166eb423a386fc4b54ef",
+      "configField": "Assets.Themes.DefaultClassic.O.DropFX.WhiteBase"
+    },
+    {
+      "themeId": "DefaultClassic",
+      "tetrominoType": "O",
+      "color": "Yellow",
+      "category": "DropFX",
+      "component": "Droplet",
+      "file": "DropFX/DefaultClassic/O/Droplet.png",
+      "dimensions": [
+        128,
+        128
+      ],
+      "robloxAssetId": "",
+      "sha256": "12e22c330715ea880588eb117effe6dc728fab2bd894a2ac3c538c81e4be902a",
+      "configField": "Assets.Themes.DefaultClassic.O.DropFX.Droplet"
+    },
+    {
+      "themeId": "DefaultClassic",
+      "tetrominoType": "O",
+      "color": "Yellow",
+      "category": "DropFX",
+      "component": "Ripple",
+      "file": "DropFX/DefaultClassic/O/Ripple.png",
+      "dimensions": [
+        512,
+        128
+      ],
+      "robloxAssetId": "",
+      "sha256": "3962ec230095c3843c523855519523056cefb01f585dc35e572db4b9ee70b28c",
+      "configField": "Assets.Themes.DefaultClassic.O.DropFX.Ripple"
+    },
+    {
+      "themeId": "DefaultClassic",
+      "tetrominoType": "T",
+      "color": "Purple",
+      "category": "Bricks",
+      "component": null,
+      "file": "Bricks/DefaultClassic/T.png",
+      "dimensions": [
+        128,
+        128
+      ],
+      "robloxAssetId": "",
+      "sha256": "bd75c5176a9ea57f189e1f792f39511cebc76ceb66bd321d60b9670e68668eb2",
+      "configField": "Assets.Themes.DefaultClassic.T.Bricks"
+    },
+    {
+      "themeId": "DefaultClassic",
+      "tetrominoType": "T",
+      "color": "Purple",
+      "category": "GhostFX",
+      "component": null,
+      "file": "GhostFX/DefaultClassic/T.png",
+      "dimensions": [
+        128,
+        128
+      ],
+      "robloxAssetId": "",
+      "sha256": "a577f4efc344ea946458c9391769115fc6c43cb31ab413cfe2c47ca1551d0120",
+      "configField": "Assets.Themes.DefaultClassic.T.GhostFX"
+    },
+    {
+      "themeId": "DefaultClassic",
+      "tetrominoType": "T",
+      "color": "Purple",
+      "category": "DropFX",
+      "component": "WhiteBase",
+      "file": "DropFX/DefaultClassic/T/WhiteBase.png",
+      "dimensions": [
+        256,
+        256
+      ],
+      "robloxAssetId": "",
+      "sha256": "cb4a9017e178b9a7255cde09b12e552e679cf3ea552149eb10410eca3129299e",
+      "configField": "Assets.Themes.DefaultClassic.T.DropFX.WhiteBase"
+    },
+    {
+      "themeId": "DefaultClassic",
+      "tetrominoType": "T",
+      "color": "Purple",
+      "category": "DropFX",
+      "component": "Droplet",
+      "file": "DropFX/DefaultClassic/T/Droplet.png",
+      "dimensions": [
+        128,
+        128
+      ],
+      "robloxAssetId": "",
+      "sha256": "095434f75f21c14de7dc49e230df4cf89ec3e18fcd9bbe5f8a044e478d554ede",
+      "configField": "Assets.Themes.DefaultClassic.T.DropFX.Droplet"
+    },
+    {
+      "themeId": "DefaultClassic",
+      "tetrominoType": "T",
+      "color": "Purple",
+      "category": "DropFX",
+      "component": "Ripple",
+      "file": "DropFX/DefaultClassic/T/Ripple.png",
+      "dimensions": [
+        512,
+        128
+      ],
+      "robloxAssetId": "",
+      "sha256": "3636aa1028b686b79b57df482ada0b6bc00e6b7048ea8c3f70647634530266fb",
+      "configField": "Assets.Themes.DefaultClassic.T.DropFX.Ripple"
+    },
+    {
+      "themeId": "DefaultClassic",
+      "tetrominoType": "S",
+      "color": "Green",
+      "category": "Bricks",
+      "component": null,
+      "file": "Bricks/DefaultClassic/S.png",
+      "dimensions": [
+        128,
+        128
+      ],
+      "robloxAssetId": "",
+      "sha256": "10c2b2bacc0b26e2b6d88efa781d01d907416e7e11014f39952a4bf7b3adb5a0",
+      "configField": "Assets.Themes.DefaultClassic.S.Bricks"
+    },
+    {
+      "themeId": "DefaultClassic",
+      "tetrominoType": "S",
+      "color": "Green",
+      "category": "GhostFX",
+      "component": null,
+      "file": "GhostFX/DefaultClassic/S.png",
+      "dimensions": [
+        128,
+        128
+      ],
+      "robloxAssetId": "",
+      "sha256": "5d8f6c1dd3beeeace91cd7e15cebaa4a7d853c4f295a92e025a1ad3854790e39",
+      "configField": "Assets.Themes.DefaultClassic.S.GhostFX"
+    },
+    {
+      "themeId": "DefaultClassic",
+      "tetrominoType": "S",
+      "color": "Green",
+      "category": "DropFX",
+      "component": "WhiteBase",
+      "file": "DropFX/DefaultClassic/S/WhiteBase.png",
+      "dimensions": [
+        256,
+        256
+      ],
+      "robloxAssetId": "",
+      "sha256": "6afa3a4cccf0b36a223a1520694cbede403fabb71e99fb012c32ccabfe4c9ef7",
+      "configField": "Assets.Themes.DefaultClassic.S.DropFX.WhiteBase"
+    },
+    {
+      "themeId": "DefaultClassic",
+      "tetrominoType": "S",
+      "color": "Green",
+      "category": "DropFX",
+      "component": "Droplet",
+      "file": "DropFX/DefaultClassic/S/Droplet.png",
+      "dimensions": [
+        128,
+        128
+      ],
+      "robloxAssetId": "",
+      "sha256": "f00644b8bc4749b4c3ece955a8699abb0cb8314a9af53397da12aa6a3434f36b",
+      "configField": "Assets.Themes.DefaultClassic.S.DropFX.Droplet"
+    },
+    {
+      "themeId": "DefaultClassic",
+      "tetrominoType": "S",
+      "color": "Green",
+      "category": "DropFX",
+      "component": "Ripple",
+      "file": "DropFX/DefaultClassic/S/Ripple.png",
+      "dimensions": [
+        512,
+        128
+      ],
+      "robloxAssetId": "",
+      "sha256": "a2b517a1cc197af9df2815e77b1ce4fb49cff432e46afb1d7c3895e18c2b6dd5",
+      "configField": "Assets.Themes.DefaultClassic.S.DropFX.Ripple"
+    },
+    {
+      "themeId": "DefaultClassic",
+      "tetrominoType": "Z",
+      "color": "Red",
+      "category": "Bricks",
+      "component": null,
+      "file": "Bricks/DefaultClassic/Z.png",
+      "dimensions": [
+        128,
+        128
+      ],
+      "robloxAssetId": "",
+      "sha256": "f6d64ba271360e1a8464577f6b2a340180973313fc756e507a575198962ffeb6",
+      "configField": "Assets.Themes.DefaultClassic.Z.Bricks"
+    },
+    {
+      "themeId": "DefaultClassic",
+      "tetrominoType": "Z",
+      "color": "Red",
+      "category": "GhostFX",
+      "component": null,
+      "file": "GhostFX/DefaultClassic/Z.png",
+      "dimensions": [
+        128,
+        128
+      ],
+      "robloxAssetId": "",
+      "sha256": "94f20ce3abe512d8922ef36c40c3f9048f6c5f7bafdb5cc30eefa96b3d63dde7",
+      "configField": "Assets.Themes.DefaultClassic.Z.GhostFX"
+    },
+    {
+      "themeId": "DefaultClassic",
+      "tetrominoType": "Z",
+      "color": "Red",
+      "category": "DropFX",
+      "component": "WhiteBase",
+      "file": "DropFX/DefaultClassic/Z/WhiteBase.png",
+      "dimensions": [
+        256,
+        256
+      ],
+      "robloxAssetId": "",
+      "sha256": "cca00ec8df654a18d195349f04a13b65be171ceef258a5adb023f20a94b661f4",
+      "configField": "Assets.Themes.DefaultClassic.Z.DropFX.WhiteBase"
+    },
+    {
+      "themeId": "DefaultClassic",
+      "tetrominoType": "Z",
+      "color": "Red",
+      "category": "DropFX",
+      "component": "Droplet",
+      "file": "DropFX/DefaultClassic/Z/Droplet.png",
+      "dimensions": [
+        128,
+        128
+      ],
+      "robloxAssetId": "",
+      "sha256": "a706d5606146e522b3562d8e47268a9c6ae0da5003e0481612ad821459f24858",
+      "configField": "Assets.Themes.DefaultClassic.Z.DropFX.Droplet"
+    },
+    {
+      "themeId": "DefaultClassic",
+      "tetrominoType": "Z",
+      "color": "Red",
+      "category": "DropFX",
+      "component": "Ripple",
+      "file": "DropFX/DefaultClassic/Z/Ripple.png",
+      "dimensions": [
+        512,
+        128
+      ],
+      "robloxAssetId": "",
+      "sha256": "e9920aa9a149ffe3f42278978fa569e5e59b5018b8026c79a6637a1dd3c99626",
+      "configField": "Assets.Themes.DefaultClassic.Z.DropFX.Ripple"
+    },
+    {
+      "themeId": "DefaultClassic",
+      "tetrominoType": "J",
+      "color": "Blue",
+      "category": "Bricks",
+      "component": null,
+      "file": "Bricks/DefaultClassic/J.png",
+      "dimensions": [
+        128,
+        128
+      ],
+      "robloxAssetId": "",
+      "sha256": "41d25a88cb99f66421bba0634599114a088fc7ce71528083b9a5af817f56e01d",
+      "configField": "Assets.Themes.DefaultClassic.J.Bricks"
+    },
+    {
+      "themeId": "DefaultClassic",
+      "tetrominoType": "J",
+      "color": "Blue",
+      "category": "GhostFX",
+      "component": null,
+      "file": "GhostFX/DefaultClassic/J.png",
+      "dimensions": [
+        128,
+        128
+      ],
+      "robloxAssetId": "",
+      "sha256": "8bf19ddf0f598b9ea59351644fabd8a310ad64087d7d126868e3046046a5636d",
+      "configField": "Assets.Themes.DefaultClassic.J.GhostFX"
+    },
+    {
+      "themeId": "DefaultClassic",
+      "tetrominoType": "J",
+      "color": "Blue",
+      "category": "DropFX",
+      "component": "WhiteBase",
+      "file": "DropFX/DefaultClassic/J/WhiteBase.png",
+      "dimensions": [
+        256,
+        256
+      ],
+      "robloxAssetId": "",
+      "sha256": "cd6bcd3626b4d6ec01f7c1b87d9839c5512ced18e9bd2447f0dd232745c50ba2",
+      "configField": "Assets.Themes.DefaultClassic.J.DropFX.WhiteBase"
+    },
+    {
+      "themeId": "DefaultClassic",
+      "tetrominoType": "J",
+      "color": "Blue",
+      "category": "DropFX",
+      "component": "Droplet",
+      "file": "DropFX/DefaultClassic/J/Droplet.png",
+      "dimensions": [
+        128,
+        128
+      ],
+      "robloxAssetId": "",
+      "sha256": "fbf6e7512a93c5f31da8426d536c7a452558ad53eef03ff2bed9a50faa57444d",
+      "configField": "Assets.Themes.DefaultClassic.J.DropFX.Droplet"
+    },
+    {
+      "themeId": "DefaultClassic",
+      "tetrominoType": "J",
+      "color": "Blue",
+      "category": "DropFX",
+      "component": "Ripple",
+      "file": "DropFX/DefaultClassic/J/Ripple.png",
+      "dimensions": [
+        512,
+        128
+      ],
+      "robloxAssetId": "",
+      "sha256": "8aae9cb17c554c63ed50448d0c4bc0c95317b7d72b753bc3baffb4e7923f35ad",
+      "configField": "Assets.Themes.DefaultClassic.J.DropFX.Ripple"
+    },
+    {
+      "themeId": "DefaultClassic",
+      "tetrominoType": "L",
+      "color": "Orange",
+      "category": "Bricks",
+      "component": null,
+      "file": "Bricks/DefaultClassic/L.png",
+      "dimensions": [
+        128,
+        128
+      ],
+      "robloxAssetId": "",
+      "sha256": "bf8a779a04ae220e2396f95c1b0407064c444281152c8777b9e0023e663bbbc5",
+      "configField": "Assets.Themes.DefaultClassic.L.Bricks"
+    },
+    {
+      "themeId": "DefaultClassic",
+      "tetrominoType": "L",
+      "color": "Orange",
+      "category": "GhostFX",
+      "component": null,
+      "file": "GhostFX/DefaultClassic/L.png",
+      "dimensions": [
+        128,
+        128
+      ],
+      "robloxAssetId": "",
+      "sha256": "c4ea17d1084e27bc7c2a497513a1a9eb7c79736ac1fa3e16096dad6202298980",
+      "configField": "Assets.Themes.DefaultClassic.L.GhostFX"
+    },
+    {
+      "themeId": "DefaultClassic",
+      "tetrominoType": "L",
+      "color": "Orange",
+      "category": "DropFX",
+      "component": "WhiteBase",
+      "file": "DropFX/DefaultClassic/L/WhiteBase.png",
+      "dimensions": [
+        256,
+        256
+      ],
+      "robloxAssetId": "",
+      "sha256": "04983465bebc5dd53c6cf0d540dcd106301c85f84c72434b50b07c589bd31ba6",
+      "configField": "Assets.Themes.DefaultClassic.L.DropFX.WhiteBase"
+    },
+    {
+      "themeId": "DefaultClassic",
+      "tetrominoType": "L",
+      "color": "Orange",
+      "category": "DropFX",
+      "component": "Droplet",
+      "file": "DropFX/DefaultClassic/L/Droplet.png",
+      "dimensions": [
+        128,
+        128
+      ],
+      "robloxAssetId": "",
+      "sha256": "eb3f9bdf8f771902e5d3ebcf038ad785cf081afa8e05b1aa4a6ca8a3b3f50f72",
+      "configField": "Assets.Themes.DefaultClassic.L.DropFX.Droplet"
+    },
+    {
+      "themeId": "DefaultClassic",
+      "tetrominoType": "L",
+      "color": "Orange",
+      "category": "DropFX",
+      "component": "Ripple",
+      "file": "DropFX/DefaultClassic/L/Ripple.png",
+      "dimensions": [
+        512,
+        128
+      ],
+      "robloxAssetId": "",
+      "sha256": "ac18013b48b6ffcc1b5b5ef2c07e0a456448793526ccfa2743cadb195fdb6b34",
+      "configField": "Assets.Themes.DefaultClassic.L.DropFX.Ripple"
+    }
+  ]
+}

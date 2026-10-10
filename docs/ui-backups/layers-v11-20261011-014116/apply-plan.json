@@ -1,0 +1,67 @@
+[
+  {
+    "path": "src/client/BrickRenderer.luau",
+    "originalSha256": "aa5eced6b2e512e5a1f2684487a96e6b1ce53078731ca836cabffef832eab6f7",
+    "stagedSha256": "f83e303e0e2a7dfe651a6e0c8014080e4f344028a39b49fb2285a611032b0a88"
+  },
+  {
+    "path": "src/client/CosmeticRenderer.luau",
+    "originalSha256": "019fcfb32a2b7e99a7940f3fd5a75a053d0901b1bbccf26712f73014da78d235",
+    "stagedSha256": "4a50fef7b8d4cbeb9f481cc98c072f4a0585285966cd243133299a65f47c9878"
+  },
+  {
+    "path": "src/client/PortalUI.luau",
+    "originalSha256": "cb091a49bed0b719364ada320c170e64669f33ab66869f8265186c4406f9b91b",
+    "stagedSha256": "2154bf95b208ee334b4c7bccf8f732cba4bebc0439eccd712bfb58026c350884"
+  },
+  {
+    "path": "src/client/RenderLayers.luau",
+    "originalSha256": null,
+    "stagedSha256": "f2cf00470c394728a639e6e316cbe427b69319fba9d1e86dc646dbd4f9ceed08"
+  },
+  {
+    "path": "src/client/TetrisUI.client.luau",
+    "originalSha256": "58173e3312bf7ea6183201e9cdb9f232b6e7d46a75f9eb51bc8f9966cc69ae63",
+    "stagedSha256": "c802b9a816ca1f0b63fcbc656a28b335e56444d1acd0c901fb14a4cf1bd92830"
+  },
+  {
+    "path": "src/client/TextureDiagnostics.luau",
+    "originalSha256": null,
+    "stagedSha256": "97756d8ecace4b5bfc9f3c8bda012f7955583dccc204199ad5361089490c391b"
+  },
+  {
+    "path": "tests/build-harnesses.js",
+    "originalSha256": "ecc159c3d0299b0cf04fc07c3fbc0daea5d8b71fc23e19fb9a775ef9bf5eef94",
+    "stagedSha256": "e2b216479cc7d2a291680c375a1b9f48f00e3cb8267785ab53f7740842defb0c"
+  },
+  {
+    "path": "tests/UIHarness.luau",
+    "originalSha256": "ab3cf2e1fb9ed50fb82a0f4963b0a90ac0ac25b5888786acdde8e7bb52bc0ae3",
+    "stagedSha256": "3ec80139713aafeb6c545816d9a684c5d6918b4a0299448db0fd4eda1678758b"
+  },
+  {
+    "path": "tests/fixtures/classic-stage-checks.luau",
+    "originalSha256": "03b07c5118d8a2afee44115d0de04036ca740c33980518053eb242449e99ca3c",
+    "stagedSha256": "3cf593f542c5f0614d29aca9b4dfb04efb50130baff91ad771e2d50911444187"
+  },
+  {
+    "path": "tests/fixtures/layers-v11-checks.luau",
+    "originalSha256": null,
+    "stagedSha256": "6f0bcb949cf9605b8d6b3299fe4bcfe3301125cc906df4aeebddb98e0bb14240"
+  },
+  {
+    "path": "tests/fixtures/texture-v10-checks.luau",
+    "originalSha256": "8699638ff410eb882ac76360e987e669dc52e9ad0d7e684a00db4014d99eef89",
+    "stagedSha256": "334c35684072578b1165870b75ff8aa18121ac307099f6a76714c35877d33ed4"
+  },
+  {
+    "path": "tests/fixtures/ui-mocks.luau",
+    "originalSha256": "53e1c7c1cd65422d0319b6f082c1726b6d0b7e1a7faca4b9a05a69d15f9964c1",
+    "stagedSha256": "2d5079322a3bcf32dafbaa0205e1987f12b82a95dfcf63fb06aa905a27773d0d"
+  },
+  {
+    "path": "docs/PNG-LAYERS-V11.md",
+    "originalSha256": null,
+    "stagedSha256": "88b26c24d94b384d0f450992399eeb884f0575d6a3b636142f1031ed8c68d94b"
+  }
+]

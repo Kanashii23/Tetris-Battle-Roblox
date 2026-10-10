@@ -3,6 +3,8 @@ return {
 	Width=10, Height=20, Hidden=4, LockDelay=0.5, MaxLockResets=15,
 	Gravity=0.8, MinGravity=0.04, SoftDropInterval=0.025, DAS=0.16, ARR=0.045,
 	MatchDuration=120, Countdown=3, SnapshotHz=12, GarbageDelay=0.8, MaxPending=40,
+	TimedKO=true, KORecovery=2.5, EmoteCooldown=4,
+	Emotes={"GG!","Nice!","WOW!","OOPS!","GOOD LUCK!","WELL PLAYED!"},
 	Score={Normal={[0]=0,100,300,500,800},Spin={[0]=400,800,1200,1600},Mini={[0]=100,200,400}},
 	Attack={Normal={[0]=0,0,1,2,4},Spin={[0]=0,2,4,6},Mini={[0]=0,0,1}},
 	BackToBackScore=1.5, BackToBackAttack=1, PerfectClearScore=2000, PerfectClearAttack=6,
@@ -56,7 +58,11 @@ function Input.new(callback,pause)
 	table.insert(self.Connections,UIS.WindowFocusReleased:Connect(function() self:release(); if self.Enabled then pause(true) end end))
 	return self
 end
+function Input:preferences(settings)
+	if self.SwapRotation~=settings.SwapRotation then self:release(); self.SwapRotation=settings.SwapRotation end
+end
 function Input:set(action,source,down)
+	if self.SwapRotation then action=action=="CW" and "CCW" or action=="CCW" and "CW" or action end
 	local set=self.Sources[action] or {}; self.Sources[action]=set
 	local old=next(set)~=nil; if down then set[source]=true else set[source]=nil end
 	local new=next(set)~=nil; if old~=new then self.Callback(action,new) end

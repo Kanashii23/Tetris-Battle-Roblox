@@ -13,20 +13,20 @@ for category,slot in pairs(Catalog.Slots) do
 end
 print("PASS all four default cosmetics equip through the real remote without spending Cash")
 local chosen={}; assert(Data:mutate(shopper,function(d)
-	d.Cash=1200
+	d.Cash=125000
 	for category in pairs(Catalog.Slots) do local item=Catalog.list(category)[2]; chosen[category]=item.Id; d.Inventory[category][item.Id]=true end
 	return true
 end))
 for category,slot in pairs(Catalog.Slots) do
 	for _,id in ipairs({chosen[category],"Default",chosen[category]}) do
 		local reply=request(category,id); assert(reply.Success and reply.Category==category and reply.Id==id)
-		assert(Data:get(shopper).Equipped[slot]==id and Data:get(shopper).Cash==1200)
+		assert(Data:get(shopper).Equipped[slot]==id and Data:get(shopper).Cash==125000)
 	end
 end
 print("PASS repeated owned skin/drop/ghost/sound equips preserve Cash and return accurate success payloads")
 local missing=Catalog.list("BrickSkins")[3].Id; local reply=request("BrickSkins",missing)
 assert(not reply.Success and reply.Code=="NotOwned" and reply.Message=="You don't own this cosmetic yet.")
-assert(Data:get(shopper).Equipped.BrickSkin==chosen.BrickSkins and Data:get(shopper).Cash==1200)
+assert(Data:get(shopper).Equipped.BrickSkin==chosen.BrickSkins and Data:get(shopper).Cash==125000)
 for _,pair in ipairs({{"BrickSkins","Missing"},{"Unknown","Default"},{"HardDropEffects","Default"}}) do
 	reply=request(pair[1],pair[2]); assert(not reply.Success and reply.Code=="Unavailable")
 end
@@ -35,7 +35,7 @@ print("PASS unowned, mismatched and malformed cosmetic requests reject without c
 -- Exercise the import on Buy as well; then equip an actually purchased item.
 S.Buckets={}; send(shopper,"Buy",{Category="BrickSkins",Id=missing}); tick(0.1)
 assert(sent[shopper].CosmeticResult.Success and Data:get(shopper).Inventory.BrickSkins[missing])
-balance=1200-Catalog.Items["BrickSkins:"..missing].Price
+balance=125000-Catalog.Items["BrickSkins:"..missing].Price
 reply=request("BrickSkins",missing); assert(reply.Success and Data:get(shopper).Cash==balance); chosen.BrickSkins=missing
 Data:release(shopper); tick(0.1)
 local reloaded; task.spawn(function() reloaded=Data:load(shopper) end); tick(0.3); assert(reloaded)

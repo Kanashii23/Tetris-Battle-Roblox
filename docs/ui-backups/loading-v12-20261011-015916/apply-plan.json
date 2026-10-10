@@ -1,0 +1,17 @@
+[
+  {
+    "originalSha256": "f83e303e0e2a7dfe651a6e0c8014080e4f344028a39b49fb2285a611032b0a88",
+    "stagedSha256": "15cb6b724ac6b71a405483aa596bf1f2f7945e4b58aae2055ca3d720384dcb1a",
+    "path": "src/client/BrickRenderer.luau"
+  },
+  {
+    "originalSha256": "4a50fef7b8d4cbeb9f481cc98c072f4a0585285966cd243133299a65f47c9878",
+    "stagedSha256": "54ea154c25fa38f73e04d1ab10981f882a84b747237d6d0f8785b49eb47c7f0c",
+    "path": "src/client/CosmeticRenderer.luau"
+  },
+  {
+    "stagedSha256": "506040a20ce8be07d19b692ea7472b48c346cd4c178909a52a1af84e129e6f49",
+    "originalSha256": "c802b9a816ca1f0b63fcbc656a28b335e56444d1acd0c901fb14a4cf1bd92830",
+    "path": "src/client/TetrisUI.client.luau"
+  }
+]

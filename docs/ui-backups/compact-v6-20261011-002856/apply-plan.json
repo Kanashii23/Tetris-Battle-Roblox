@@ -1,0 +1,52 @@
+[
+  {
+    "path": "src/client/NeonUI.luau",
+    "originalSha256": "2b79edf310d81491b6ae36617091e3d29d8863cf60339070a616c6088478ddc4",
+    "stagedSha256": "aff826b2a98b400aabdc66454da2356d798349ec283ea81c62c529b65ac84bf1"
+  },
+  {
+    "path": "src/client/PortalUI.luau",
+    "originalSha256": "fdc087cd3a55e6a4d2ee643b7fa4ebbe8ee81f9d588b00dff00a8e61317918f4",
+    "stagedSha256": "399a6d0faffce8381f71a9fd5d784cd1ebdbcdb7ad9a97feb160132d38c0e43f"
+  },
+  {
+    "path": "src/client/RetroArtwork.luau",
+    "originalSha256": "7dd06e19eebb03cd9f3045fba04febb4f76194c6502c09bd0cace5346cba98bc",
+    "stagedSha256": "643a62658d29b29c4ef8872c0074d34ceb45497997e52ac20c7a588847b2ea10"
+  },
+  {
+    "path": "src/client/TetrisUI.client.luau",
+    "originalSha256": "c72ea446d4b863e49b92cf407b0e0aea4bf27f6cc3d7345167b49e1525377676",
+    "stagedSha256": "f7759a672c815661ad7705c69f2cee6e6bd7bdb51fbeca41935915a4f9568179"
+  },
+  {
+    "path": "tests/build-harnesses.js",
+    "originalSha256": "a4c8dd2c3c0bd8fea3588455b9fb7e7d7feddd6a087f028ff8759dea55a48ac9",
+    "stagedSha256": "794356ea9f66a8be96a7ba169d7d0d21467de9b72d4686ab9b87dbe02863d587"
+  },
+  {
+    "path": "tests/UIHarness.luau",
+    "originalSha256": "b24de70faa2a7b9c7ab439c5830dc4b8f89e4552f1704870503ed9ee0db5b2be",
+    "stagedSha256": "3aaf8746e07059d4bd190072a0ed42fd33ee96d97b9d000adff82a7c504e325c"
+  },
+  {
+    "path": "tests/fixtures/classic-stage-checks.luau",
+    "originalSha256": "c6409d049e8d3e15f36fbe6723e735e8367fa0a663de9399173938a021bd5bd7",
+    "stagedSha256": "d333ed0a05db769bd5cf479f9a67cd0f0510420881eb5aed314278e5a32501af"
+  },
+  {
+    "path": "tests/fixtures/compact-v6-checks.luau",
+    "originalSha256": null,
+    "stagedSha256": "a3b2c9539d5099d9b28cf8a44769312ec949a10c0aa9a91ee5ee148f41a3d37a"
+  },
+  {
+    "path": "tests/fixtures/neon-rebuild-checks.luau",
+    "originalSha256": "daaf5f3af9937a150a251e452ce1482055b67d194b79d8ddfb360e5ac89468b4",
+    "stagedSha256": "6fac7a65aea06dca5e2cdf338d4eb4ca1585d6bd7ecb2d99d5a3405c16deb59a"
+  },
+  {
+    "path": "docs/COMPACT-MENUS-V6.md",
+    "originalSha256": null,
+    "stagedSha256": "f6a21f3137aef2c327f6862c1ecca31ca84ffaee3dc6900fba7b33fb4ef46851"
+  }
+]

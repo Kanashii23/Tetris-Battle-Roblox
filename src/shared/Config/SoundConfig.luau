@@ -43,9 +43,14 @@ local sounds={
 	Purchase="109774926433136",
 	Equip="91636886424886",
 	SeasonReward="73661580915742",
+	-- Upload permitted 8-bit assets; empty IDs are silent until configured.
+	GarbageWarningLow="",GarbageWarningMedium="",GarbageWarningHigh="",GarbageWarningCritical="",
+	RankProgress="",StarEarned="",StarLost="",VictoryFanfare="",
 }
 return {
 	MasterVolume=1,MusicVolume=0.5,SFXVolume=0.8,Sounds=sounds,
+	GarbageWarning={Cooldowns={3,1.8,1.1,0.7},Volumes={0.22,0.3,0.4,0.5},MaxSampleSeconds=0.5,MinimumInterval=0.65},
+	CountdownVariants={}, -- Optional [3], [2], [1] sound IDs; falls back to Countdown.
 	-- Sound pack overrides are configured here, never in gameplay scripts.
-	Packs={Default={Pitch=1,Sounds={}},RetroArcade={Pitch=1.2,Sounds={}},Cyber={Pitch=0.85,Sounds={}},Crystal={Pitch=1.4,Sounds={}},NeonClub={Pitch=1.05,Sounds={}}},
+	Packs={Default={Pitch=1,Sounds={}},RetroArcade={Pitch=1.2,Sounds={}},Cyber={Pitch=0.85,Sounds={}},Crystal={Pitch=1.4,Sounds={}},NeonClub={Pitch=1.05,Sounds={}},GoldenElite={Pitch=1,Sounds={}},Galaxy={Pitch=1,Sounds={}}},
 }

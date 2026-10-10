@@ -33,7 +33,7 @@ test("login preserves earned cycle after missed days",function()
 	local d=fresh(); assert(P.login(d,now,C)); assert(not P.login(d,now,C)); assert(P.login(d,now+5*86400,C)); assert(d.Login.Index==2 and d.Cash==75)
 end)
 test("cosmetic purchase, equip, ownership, insufficient funds",function()
-	local d=fresh(); local item=Catalog.list("BrickSkins")[2]; assert(not P.purchase(d,item.Category,item.Id,Catalog,false)); d.Cash=1000
+	local d=fresh(); local item=Catalog.list("BrickSkins")[2]; assert(not P.purchase(d,item.Category,item.Id,Catalog,false)); d.Cash=item.Price+1000
 	assert(P.purchase(d,item.Category,item.Id,Catalog,false)); local cash=d.Cash; assert(not P.purchase(d,item.Category,item.Id,Catalog,false)); assert(d.Cash==cash)
 	assert(P.equip(d,item.Category,item.Id,Catalog,false)); assert(d.Equipped.BrickSkin==item.Id)
 end)

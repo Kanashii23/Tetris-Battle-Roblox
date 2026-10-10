@@ -1,0 +1,62 @@
+[
+  {
+    "path": "src/client/PortalUI.luau",
+    "originalSha256": "399a6d0faffce8381f71a9fd5d784cd1ebdbcdb7ad9a97feb160132d38c0e43f",
+    "stagedSha256": "d474b65ae55075aa7f630764099ffd6876778c49016cee998ad2f8f5573ddd7a"
+  },
+  {
+    "path": "src/client/RetroArtwork.luau",
+    "originalSha256": "643a62658d29b29c4ef8872c0074d34ceb45497997e52ac20c7a588847b2ea10",
+    "stagedSha256": "c3bee492e96e34429a65c1377068650c76a5f383d551622529ce15b3a9913a68"
+  },
+  {
+    "path": "src/client/TetrisUI.client.luau",
+    "originalSha256": "f7759a672c815661ad7705c69f2cee6e6bd7bdb51fbeca41935915a4f9568179",
+    "stagedSha256": "318620e37853e282aeeba793241b6946b10fffcd41e9291ad9f8b742ffbae92b"
+  },
+  {
+    "path": "src/server/ServerMain.luau",
+    "originalSha256": "353a94a7ccacc03d188a22e7bcd5b37c16057d70830efca96ae4c1db42c80a13",
+    "stagedSha256": "e6ca9345c9a7790e1690e31f2b44bf998a385aeb622b4e88be6ab2f187608465"
+  },
+  {
+    "path": "tests/build-harnesses.js",
+    "originalSha256": "794356ea9f66a8be96a7ba169d7d0d21467de9b72d4686ab9b87dbe02863d587",
+    "stagedSha256": "953b60e1ac1a08493e354f8272676f5153b660b69b0db2086a775a5a63dd634b"
+  },
+  {
+    "path": "tests/ProfileStoreHarness.luau",
+    "originalSha256": "fa9a784dc00410e338aa22bf93af9e412af96852ac3a93145c31a073aa123a84",
+    "stagedSha256": "19539d70c2b682874f894eefb2b662a9ddec93f4f3fff808b00455905de4f36f"
+  },
+  {
+    "path": "tests/ServerHarness.luau",
+    "originalSha256": "443982ca5915dcd6075f51e6f08bc20ab431f4de7d12acf75f81cceb84fe99d4",
+    "stagedSha256": "7d3ff76545a7e488bf279f014674c7370e0b70fa885c5ed7f7287a3e46718768"
+  },
+  {
+    "path": "tests/UIHarness.luau",
+    "originalSha256": "3aaf8746e07059d4bd190072a0ed42fd33ee96d97b9d000adff82a7c504e325c",
+    "stagedSha256": "2eeebcc1130b545448679652d3b647926a2f3502e29c68480b6ad78c40eebe4a"
+  },
+  {
+    "path": "tests/fixtures/compact-v6-checks.luau",
+    "originalSha256": "a3b2c9539d5099d9b28cf8a44769312ec949a10c0aa9a91ee5ee148f41a3d37a",
+    "stagedSha256": "8ed81d8beb2500567aced6793120bd60c52c0cd901d3de343084ab9dfdffbd19"
+  },
+  {
+    "path": "tests/fixtures/targeted-v7-checks.luau",
+    "originalSha256": null,
+    "stagedSha256": "c9cb7b9868f3c41ee654a703333d4b6c536e310ad50f64e7777eb58ed211b219"
+  },
+  {
+    "path": "tests/fixtures/targeted-v7-server-checks.luau",
+    "originalSha256": null,
+    "stagedSha256": "0a61af2d815415afc629f12070d3d52cabb5a0e948671462a68f2005ae22485d"
+  },
+  {
+    "path": "docs/TARGETED-UI-V7.md",
+    "originalSha256": null,
+    "stagedSha256": "f12ff79d1fcb278179446600d169e5e302a393b87e5fb14a7cd9e2e9248cda4b"
+  }
+]

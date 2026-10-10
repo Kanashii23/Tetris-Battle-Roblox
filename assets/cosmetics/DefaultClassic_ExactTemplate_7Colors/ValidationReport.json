@@ -1,0 +1,175 @@
+{
+  "components": [
+    {
+      "piece": "I",
+      "component": "Droplet",
+      "dimensionsMatch": true,
+      "alphaByteIdentical": true,
+      "hsvBrightnessExact": true,
+      "whiteCorePixelsUnchanged": null
+    },
+    {
+      "piece": "O",
+      "component": "Droplet",
+      "dimensionsMatch": true,
+      "alphaByteIdentical": true,
+      "hsvBrightnessExact": true,
+      "whiteCorePixelsUnchanged": null
+    },
+    {
+      "piece": "T",
+      "component": "Droplet",
+      "dimensionsMatch": true,
+      "alphaByteIdentical": true,
+      "hsvBrightnessExact": true,
+      "whiteCorePixelsUnchanged": null
+    },
+    {
+      "piece": "S",
+      "component": "Droplet",
+      "dimensionsMatch": true,
+      "alphaByteIdentical": true,
+      "hsvBrightnessExact": true,
+      "whiteCorePixelsUnchanged": null
+    },
+    {
+      "piece": "Z",
+      "component": "Droplet",
+      "dimensionsMatch": true,
+      "alphaByteIdentical": true,
+      "hsvBrightnessExact": true,
+      "whiteCorePixelsUnchanged": null
+    },
+    {
+      "piece": "J",
+      "component": "Droplet",
+      "dimensionsMatch": true,
+      "alphaByteIdentical": true,
+      "hsvBrightnessExact": true,
+      "whiteCorePixelsUnchanged": null
+    },
+    {
+      "piece": "L",
+      "component": "Droplet",
+      "dimensionsMatch": true,
+      "alphaByteIdentical": true,
+      "hsvBrightnessExact": true,
+      "whiteCorePixelsUnchanged": null
+    },
+    {
+      "piece": "I",
+      "component": "WhiteBase",
+      "dimensionsMatch": true,
+      "alphaByteIdentical": true,
+      "hsvBrightnessExact": true,
+      "whiteCorePixelsUnchanged": 56255
+    },
+    {
+      "piece": "O",
+      "component": "WhiteBase",
+      "dimensionsMatch": true,
+      "alphaByteIdentical": true,
+      "hsvBrightnessExact": true,
+      "whiteCorePixelsUnchanged": 56255
+    },
+    {
+      "piece": "T",
+      "component": "WhiteBase",
+      "dimensionsMatch": true,
+      "alphaByteIdentical": true,
+      "hsvBrightnessExact": true,
+      "whiteCorePixelsUnchanged": 56255
+    },
+    {
+      "piece": "S",
+      "component": "WhiteBase",
+      "dimensionsMatch": true,
+      "alphaByteIdentical": true,
+      "hsvBrightnessExact": true,
+      "whiteCorePixelsUnchanged": 56255
+    },
+    {
+      "piece": "Z",
+      "component": "WhiteBase",
+      "dimensionsMatch": true,
+      "alphaByteIdentical": true,
+      "hsvBrightnessExact": true,
+      "whiteCorePixelsUnchanged": 56255
+    },
+    {
+      "piece": "J",
+      "component": "WhiteBase",
+      "dimensionsMatch": true,
+      "alphaByteIdentical": true,
+      "hsvBrightnessExact": true,
+      "whiteCorePixelsUnchanged": 56255
+    },
+    {
+      "piece": "L",
+      "component": "WhiteBase",
+      "dimensionsMatch": true,
+      "alphaByteIdentical": true,
+      "hsvBrightnessExact": true,
+      "whiteCorePixelsUnchanged": 56255
+    },
+    {
+      "piece": "I",
+      "component": "Ripple",
+      "dimensionsMatch": true,
+      "alphaByteIdentical": true,
+      "hsvBrightnessExact": true,
+      "whiteCorePixelsUnchanged": null
+    },
+    {
+      "piece": "O",
+      "component": "Ripple",
+      "dimensionsMatch": true,
+      "alphaByteIdentical": true,
+      "hsvBrightnessExact": true,
+      "whiteCorePixelsUnchanged": null
+    },
+    {
+      "piece": "T",
+      "component": "Ripple",
+      "dimensionsMatch": true,
+      "alphaByteIdentical": true,
+      "hsvBrightnessExact": true,
+      "whiteCorePixelsUnchanged": null
+    },
+    {
+      "piece": "S",
+      "component": "Ripple",
+      "dimensionsMatch": true,
+      "alphaByteIdentical": true,
+      "hsvBrightnessExact": true,
+      "whiteCorePixelsUnchanged": null
+    },
+    {
+      "piece": "Z",
+      "component": "Ripple",
+      "dimensionsMatch": true,
+      "alphaByteIdentical": true,
+      "hsvBrightnessExact": true,
+      "whiteCorePixelsUnchanged": null
+    },
+    {
+      "piece": "J",
+      "component": "Ripple",
+      "dimensionsMatch": true,
+      "alphaByteIdentical": true,
+      "hsvBrightnessExact": true,
+      "whiteCorePixelsUnchanged": null
+    },
+    {
+      "piece": "L",
+      "component": "Ripple",
+      "dimensionsMatch": true,
+      "alphaByteIdentical": true,
+      "hsvBrightnessExact": true,
+      "whiteCorePixelsUnchanged": null
+    }
+  ],
+  "allAlphaChannelsByteIdentical": true,
+  "maxHsvValueDifference": 0,
+  "purpleTemplatesByteIdentical": true
+}

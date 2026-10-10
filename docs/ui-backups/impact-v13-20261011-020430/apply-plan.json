@@ -1,0 +1,17 @@
+[
+  {
+    "path": "src/client/CosmeticRenderer.luau",
+    "stagedSha256": "985b0b6e0f293c48c59452958b32ebe89f0f7d8cd2c2bd34e73d6bd8a13528f4",
+    "originalSha256": "54ea154c25fa38f73e04d1ab10981f882a84b747237d6d0f8785b49eb47c7f0c"
+  },
+  {
+    "path": "src/shared/Config/CosmeticsAssetMetadata.luau",
+    "stagedSha256": "52ea055fabcae4302efff8b9309284706607a2b8bb57dc7db438b14f9363abb8",
+    "originalSha256": "d696a8c08880a90eebac8faeea2cd631aa10b0e84544d63d2c1fd44b5976d9b7"
+  },
+  {
+    "path": "src/client/TetrisUI.client.luau",
+    "stagedSha256": "cda16951ef9afacf3a2a988fa66253181568aa9b912f4613d7711a8f50a4b0cc",
+    "originalSha256": "506040a20ce8be07d19b692ea7472b48c346cd4c178909a52a1af84e129e6f49"
+  }
+]

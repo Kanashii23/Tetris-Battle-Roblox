@@ -4,7 +4,7 @@ const path = require('path');
 const project = path.resolve(__dirname, '..');
 const source = file => fs.readFileSync(path.join(project, file), 'utf8');
 const fixture = file => fs.readFileSync(path.join(__dirname, 'fixtures', file), 'utf8');
-const moduleCode = (name, file) => `local ${name}=(function()\n${source(file)}\nend)()\n`;
+const moduleCode = (name, file) => `local ${name}=(function()\n${name === "Catalog" ? source(file).replace(/^local Definition=.*\r?\n/, "local Definition=" + "(function()\n" + source("src/shared/Config/CosmeticConfig.luau") + "\nend)()\n") : source(file)}\nend)()\n`;
 const pure = [
   ['E', 'src/shared/TetrisEngine.luau'],
   ['R', 'src/shared/Config/Rules.luau'],
@@ -22,6 +22,8 @@ for (const [key, file] of [
 }
 server += fixture('server-checks.luau');
 server += fixture('equip-checks.luau');
+server += fixture('arcade-server-checks.luau');
+server += fixture('targeted-v7-server-checks.luau');
 fs.writeFileSync(path.join(__dirname, 'ServerHarness.luau'), server);
 
 const input = moduleCode('R', 'src/shared/Config/Rules.luau') + fixture('Input-mocks.luau')
@@ -29,13 +31,27 @@ const input = moduleCode('R', 'src/shared/Config/Rules.luau') + fixture('Input-m
 fs.writeFileSync(path.join(__dirname, 'InputHarness.luau'), input);
 
 let ui = pure.map(([key, file]) => moduleCode(key, file)).join('');
+ui += ["CosmeticsAssetIds","CosmeticsAssetMetadata","UIAssetConfig","UIThemeConfig","DeveloperProductConfig","BattleEffectsConfig","ShopPreviewConfig","DropEffectConfig","RankIconConfig","CurrencyIconConfig","BrickSkinConfig","GhostEffectConfig"].map(name => moduleCode(name,'src/shared/Config/'+name+'.luau')).join('');
 ui += moduleCode('SoundConfig', 'src/shared/Config/SoundConfig.luau') + fixture('ui-mocks.luau');
-for (const key of ['RetroTheme', 'NeonUI', 'NeonLayout', 'RetroArtwork', 'BrickStyles', 'AudioController', 'InputController', 'CosmeticRenderer', 'BrickRenderer', 'BrickPreviewRenderer', 'GameClient', 'PortalUI']) {
+ui += '\nmodules.CosmeticsAssetResolver=(function() local script={Parent=ConfigFolder}\n'+source('src/shared/Config/CosmeticsAssetResolver.luau')+'\nend)()\nlocal CosmeticsAssetResolver=modules.CosmeticsAssetResolver\n';
+ui += '\nlocal configuredDefault=table.clone(CosmeticsAssetIds.Default)\nlocal configuredImages=UIAssetConfig.Images\nlocal function blankImages(t) local result={} for k,v in pairs(t) do result[k]=type(v)=="table" and blankImages(v) or "" end return result end\nUIAssetConfig.Images=blankImages(configuredImages)\n';
+for (const key of ['TextureDiagnostics', 'RenderLayers', 'UIAssets', 'CosmeticsAssets', 'RetroTheme', 'NeonUI', 'NeonLayout', 'RetroArtwork', 'BrickStyles', 'AudioController', 'InputController', 'CosmeticRenderer', 'BrickRenderer', 'BrickPreviewRenderer', 'GameClient', 'ArcadeFeedback', 'ArcadeResults', 'PortalUI']) {
   ui += `\nmodules.${key}=(function()\n${source(`src/client/${key}.luau`)}\nend)()\n`;
 }
 ui += '\nlocal app=(function()\n' + source('src/client/TetrisUI.client.luau')
-  + '\nreturn {gui=gui,menu=menu,portal=portal,root=root,scale=rootScale,safe=safe,layout=applyLayout,own=ownBoard,enemy=enemyBoard,menuObjects=menuObjects,nav=navButtons}\nend)()\n';
+  + '\nreturn {gui=gui,menu=menu,portal=portal,root=root,scale=rootScale,safe=safe,layout=applyLayout,own=ownBoard,enemy=enemyBoard,arcade=arcade,client=client,menuObjects=menuObjects,nav=navButtons,art=art,backdrop=backdrop}\nend)()\n';
 ui += fixture('ui-checks.luau');
+ui += fixture('arcade-ui-checks.luau');
+ui += fixture('ui-v3-checks.luau');
+ui += fixture('reference-ui-checks.luau');
+ui += fixture('classic-stage-checks.luau');
+ui += fixture('neon-rebuild-checks.luau');
+ui += fixture('compact-v6-checks.luau');
+ui += fixture('targeted-v7-checks.luau');
+ui += fixture('transparency-v8-checks.luau');
+ui += fixture('integrated-v9-checks.luau');
+ui += fixture('texture-v10-checks.luau');
+ui += fixture('layers-v11-checks.luau');
 fs.writeFileSync(path.join(__dirname, 'UIHarness.luau'), ui);
 let profiles=pure.map(([key,file])=>moduleCode(key,file)).join('')+fixture('profile-mocks.luau');
 for(const key of ['ProfileStore','ProfileStoreMigration','PlayerDataService']){

@@ -4,7 +4,7 @@ local Rules=require(game:GetService("ReplicatedStorage"):WaitForChild("Shared"):
 local Input={}; Input.__index=Input
 function Input.new(callback,pause)
 	local self=setmetatable({Callback=callback,Enabled=false,Sources={},Touches={},Connections={},Actions={}},Input)
-	local keyboard={Left={Enum.KeyCode.A,Enum.KeyCode.Left},Right={Enum.KeyCode.D,Enum.KeyCode.Right},SoftDrop={Enum.KeyCode.S,Enum.KeyCode.Down},CW={Enum.KeyCode.X,Enum.KeyCode.Up},CCW={Enum.KeyCode.Z},HardDrop={Enum.KeyCode.Space},Hold={Enum.KeyCode.C,Enum.KeyCode.LeftShift}}
+	local keyboard={Left={Enum.KeyCode.A,Enum.KeyCode.Left},Right={Enum.KeyCode.D,Enum.KeyCode.Right},SoftDrop={Enum.KeyCode.S,Enum.KeyCode.Down},CW={Enum.KeyCode.W,Enum.KeyCode.X,Enum.KeyCode.Up},CCW={Enum.KeyCode.Z},HardDrop={Enum.KeyCode.Space},Hold={Enum.KeyCode.C,Enum.KeyCode.LeftShift}}
 	for action,keys in pairs(keyboard) do
 		table.insert(keys,Enum.KeyCode[Rules.Gamepad[action]])
 		local name="Tetris_"..action; table.insert(self.Actions,name)
@@ -29,7 +29,11 @@ function Input.new(callback,pause)
 	table.insert(self.Connections,UIS.WindowFocusReleased:Connect(function() self:release(); if self.Enabled then pause(true) end end))
 	return self
 end
+function Input:preferences(settings)
+	if self.SwapRotation~=settings.SwapRotation then self:release(); self.SwapRotation=settings.SwapRotation end
+end
 function Input:set(action,source,down)
+	if self.SwapRotation then action=action=="CW" and "CCW" or action=="CCW" and "CW" or action end
 	local set=self.Sources[action] or {}; self.Sources[action]=set
 	local old=next(set)~=nil; if down then set[source]=true else set[source]=nil end
 	local new=next(set)~=nil; if old~=new then self.Callback(action,new) end

@@ -52,7 +52,7 @@ function E.new(seed,rules)
 	local s={rules=rules,board={},queue={},bagSeed=normalized,garbageSeed=(normalized+777)%2147483646+1,
 		alive=true,paused=false,elapsed=0,score=0,lines=0,level=1,combo=-1,b2b=false,hold=false,held=false,
 		pending={},controls={},horizontal=0,repeatTime=0,events={},sequence=0,
-		stats={TSpins=0,Tetrises=0,PerfectClears=0,Sent=0,KOs=0},
+		stats={TSpins=0,Tetrises=0,PerfectClears=0,Sent=0,KOs=0,BestCombo=0},
 	}
 	for y=1,rules.Height+rules.Hidden do s.board[y]=table.create(rules.Width,0) end
 	E.spawn(s); return s
@@ -132,6 +132,7 @@ function E.lock(s)
 	if continued then score=math.floor(score*s.rules.BackToBackScore); attack+=s.rules.BackToBackAttack; emit(s,"BackToBack") end
 	if cleared>0 then
 		s.combo+=1; if difficult then s.b2b=true else s.b2b=false end
+		s.stats.BestCombo=math.max(s.stats.BestCombo,s.combo)
 		score+=50*math.max(0,s.combo)*s.level
 		attack+=s.rules.ComboAttack[math.min(s.combo+1,#s.rules.ComboAttack)]
 		if s.combo>0 then emit(s,"Combo",{combo=s.combo}) end
@@ -162,7 +163,7 @@ function E.hardDrop(s)
 	local distance=0
 	while true do local p=table.clone(s.piece); p.y+=1; if not E.fits(s,p) then break end; s.piece=p; distance+=1 end
 	if distance>0 then s.spin=false end
-	s.score+=distance*2; emit(s,"HardDrop",{distance=distance}); return E.lock(s)
+	s.score+=distance*2; emit(s,"HardDrop",{distance=distance,x=s.piece.x,y=s.piece.y-s.rules.Hidden,kind=s.piece.kind,rotation=s.piece.rotation}); return E.lock(s)
 end
 function E.release(s)
 	s.controls={}; s.horizontal=0; s.repeatTime=0
@@ -231,6 +232,8 @@ return {
 	Width=10, Height=20, Hidden=4, LockDelay=0.5, MaxLockResets=15,
 	Gravity=0.8, MinGravity=0.04, SoftDropInterval=0.025, DAS=0.16, ARR=0.045,
 	MatchDuration=120, Countdown=3, SnapshotHz=12, GarbageDelay=0.8, MaxPending=40,
+	TimedKO=true, KORecovery=2.5, EmoteCooldown=4,
+	Emotes={"GG!","Nice!","WOW!","OOPS!","GOOD LUCK!","WELL PLAYED!"},
 	Score={Normal={[0]=0,100,300,500,800},Spin={[0]=400,800,1200,1600},Mini={[0]=100,200,400}},
 	Attack={Normal={[0]=0,0,1,2,4},Spin={[0]=0,2,4,6},Mini={[0]=0,0,1}},
 	BackToBackScore=1.5, BackToBackAttack=1, PerfectClearScore=2000, PerfectClearAttack=6,
@@ -252,7 +255,7 @@ function P.default(now)
 		Stats={Wins=0,QualifiedWins=0,Losses=0,Draws=0,Matches=0,KOs=0,Lines=0,TSpins=0,Tetrises=0,PerfectClears=0,Sent=0,BestWinStreak=0,CurrentWinStreak=0},
 		Inventory={BrickSkins={Default=true},DropEffects={Default=true},GhostEffects={Default=true},SoundPacks={Default=true},Badges={}},
 		Equipped={BrickSkin="Default",DropEffect="Default",GhostEffect="Default",SoundPack="Default"},Quests={},SocialRewards={Seen={},Day=0,Count=0},
-		Season={Id=0,Rating=1000,Wins=0,History={}},ProcessedMatchIds={},MatchReceipts={},Reservations={},Pairs={},Achievements={},Login={LastDay=-1,Index=0},Settings={Sound=true,ReducedMotion=false},CreatedAt=now,
+		Season={Id=0,Rating=1000,Wins=0,History={}},ProcessedMatchIds={},MatchReceipts={},Reservations={},Pairs={},Achievements={},Login={LastDay=-1,Index=0},Settings={Sound=true,ReducedMotion=false,Master=1,MusicVolume=0.5,SFXVolume=0.8,UIScale=1,ClassicHUD=false,SwapRotation=false},CreatedAt=now,
 	}
 end
 function P.validate(data,now,catalog,config)
@@ -420,23 +423,34 @@ return {
 
 end)()
 local Catalog=(function()
-local Catalog={Items={},Categories={"BrickSkins","DropEffects","GhostEffects","SoundPacks"},Slots={BrickSkins="BrickSkin",DropEffects="DropEffect",GhostEffects="GhostEffect",SoundPacks="SoundPack"}}
+local Definition=(function()
+-- Stable IDs are save keys. Never rename or remove an existing owned cosmetic.
+local Config={Prices={Common=2500,Rare=7500,Epic=20000,Legendary=50000,Mythic=125000},Collections={}}
 local sets={
-	BrickSkins={"Default Classic","Neon Club","Cyber Core","Ocean Wave","Galaxy","Gold Elite","Lava","Crystal Glass","Retro Pixel","Holographic"},
-	DropEffects={"Default","Neon Sparks","Lightning Strike","Stardust","Fire Burst","Pixel Explosion","Crystal Shatter","Cyber Glitch"},
-	GhostEffects={"Default Outline","Neon Outline","Hologram","Pulse","Glitch","Prism","Electric"},
-	SoundPacks={"Default","Retro Arcade","Cyber","Crystal","Neon Club"},
+	BrickSkins={{"Default","Default Classic","Common"},{"NeonClub","Neon Club","Rare"},{"CyberCore","Cyber Core","Epic"},{"OceanWave","Ocean Wave","Common"},{"Galaxy","Galaxy","Legendary"},{"GoldElite","Gold Elite","Legendary"},{"Lava","Lava","Epic"},{"CrystalGlass","Crystal Glass","Epic"},{"RetroPixel","Retro Pixel","Common"},{"Holographic","Holographic","Legendary"},{"Glitch","Glitch","Epic"},{"RoyalPrism","Royal Prism","Mythic"}},
+	DropEffects={{"Default","Default","Common"},{"NeonSparks","Neon Shockwave","Rare"},{"LightningStrike","Lightning Strike","Epic"},{"Stardust","Galaxy Collapse","Legendary"},{"FireBurst","Inferno Slam","Epic"},{"PixelExplosion","Pixel Impact","Common"},{"CrystalShatter","Crystal Shatter","Epic"},{"CyberGlitch","Cyber Glitch","Rare"},{"GoldenImpact","Golden Impact","Legendary"},{"RoyalPrism","Royal Prism","Mythic"}},
+	GhostEffects={{"Default","Classic Outline","Common"},{"NeonOutline","Neon Outline","Rare"},{"Hologram","Hologram","Rare"},{"Pulse","Neon Pulse","Epic"},{"Glitch","Glitch Phantom","Epic"},{"Prism","Prism","Legendary"},{"Electric","Electric","Epic"},{"PixelDotted","Pixel Dotted","Common"},{"CyberScanline","Cyber Scanline","Rare"},{"CrystalOutline","Crystal Outline","Epic"},{"GoldenTrace","Golden Trace","Legendary"},{"GalaxyShadow","Galaxy Shadow","Legendary"},{"RoyalPrism","Royal Prism Ghost","Mythic"}},
+	SoundPacks={{"Default","Default 8-Bit","Common"},{"RetroArcade","Retro Arcade","Common"},{"Cyber","Cyber","Rare"},{"Crystal","Crystal","Epic"},{"NeonClub","Neon Club","Rare"},{"GoldenElite","Golden Elite","Legendary"},{"Galaxy","Galaxy","Legendary"}},
 }
+for category,rows in pairs(sets) do
+	Config.Collections[category]={}
+	for _,row in ipairs(rows) do table.insert(Config.Collections[category],{Id=row[1],Name=row[2],Rarity=row[3],Price=row[1]=="Default" and 0 or Config.Prices[row[3]],DefaultOwned=row[1]=="Default"}) end
+end
+-- Display/render alias only: existing catalog/save IDs and prices remain unchanged.
+function Config.AssetTheme(category,id)
+ local ids=require(game:GetService("ReplicatedStorage"):WaitForChild("Shared"):WaitForChild("Config"):WaitForChild("CosmeticsAssetResolver"))
+ local keys={BrickSkins="Bricks",GhostEffects="GhostFX",DropEffects="DropFX"}
+ return ids.theme(keys[category],id)
+end
+return Config
+
+end)()
+local Catalog={Items={},Categories={"BrickSkins","DropEffects","GhostEffects","SoundPacks"},Slots={BrickSkins="BrickSkin",DropEffects="DropEffect",GhostEffects="GhostEffect",SoundPacks="SoundPack"},Prices=Definition.Prices}
 local hues={{0.15,0.9,1},{0.7,0.4,1},{0.1,0.7,1},{0.8,0.5,1},{1,0.8,0.2},{1,0.3,0.1},{0.7,0.9,1}}
-for category,names in pairs(sets) do
-	for index,name in ipairs(names) do
-		local id=index==1 and "Default" or name:gsub("%s","")
-		local item={Id=id,Name=name,Category=category,Rarity=index<4 and "Common" or (index<7 and "Rare" or "Epic"),Price=index==1 and 0 or (index-1)*175,
-			Description="Cosmetic only. Changes appearance or sound; never gameplay.",Preview={Kind="T",Color=hues[(index-1)%#hues+1]},
-			Visual={Tint=index==1 and nil or hues[(index-1)%#hues+1],Blend=0.12+(index%3)*0.08,Border=index%2==0,Transparency=category=="GhostEffects" and (0.72+(index%3)*0.05) or 0,Effect=index},
-			Audio={Pack=id},
-		}
-		Catalog.Items[category..":"..id]=item
+for category,rows in pairs(Definition.Collections) do
+	for index,definition in ipairs(rows) do
+		local item=table.clone(definition); item.Category=category; item.Description="Cosmetic only. Shared live-board renderer; no gameplay advantages."
+		item.Preview={Kind="T",Color=hues[(index-1)%#hues+1]}; item.Visual={Blend=0,Transparency=0,Effect=index}; item.Audio={Pack=item.Id}; Catalog.Items[category..":"..item.Id]=item
 	end
 end
 function Catalog.list(category)
@@ -3031,7 +3045,7 @@ assert(table.find(pa.UserIds,101)); assert(records[ns]["101"].Data.Cash==0)
 assert(next(ProfileStore.Test().MockStore)==nil and next(ProfileStore.Test().UserMockStore)==nil)
 print("PASS supplied ProfileStore creates distinct active sessions with user IDs and real-backend API calls")
 assert(Data:mutate(a,function(d)
-	d.Cash=5000; d.Rank={Tier=3,Stars=2,Rating=1345}; d.Stats.Wins=9; d.Stats.Losses=4; d.Stats.CurrentWinStreak=3; d.Stats.BestWinStreak=6
+	d.Cash=125000; d.Rank={Tier=3,Stars=2,Rating=1345}; d.Stats.Wins=9; d.Stats.Losses=4; d.Stats.CurrentWinStreak=3; d.Stats.BestWinStreak=6
 	d.Season.Rating=1500; d.Season.Wins=5; d.Quests.Daily.Progress.lines=24; d.Quests.Weekly.Progress.wins=8
 	d.Login.Index=4; d.Login.LastDay=math.floor(os.time()/86400); d.Achievements.Test=true; d.Inventory.Badges.Test=true; d.Settings.ReducedMotion=true; d.Settings.Sound=false
 	d.Energy.Current=3; d.Energy.LastRegenTimestamp=os.time(); return true
@@ -3112,13 +3126,13 @@ local reservation=player(809); assert(Data:load(reservation)); assert(Data:mutat
 Data:release(reservation); assert(Data:load(reservation)); assert(Data:get(reservation).Energy.Current==9 and not next(Data:get(reservation).Reservations))
 Data:release(reservation); assert(Data:load(reservation)); assert(Data:get(reservation).Energy.Current==9)
 print("PASS abandoned energy reservations refund once and remain cleared after rejoin")
-local purchase=player(909); assert(Data:load(purchase)); assert(Data:mutate(purchase,function(d) d.Cash=1000; return true end))
+local purchase=player(909); assert(Data:load(purchase)); assert(Data:mutate(purchase,function(d) d.Cash=125000; return true end))
 faults.Writes[ns]=true; local skin=Catalog.list("BrickSkins")[2]
 assert(not async(function() return Data:mutate(purchase,function(d) return P.purchase(d,"BrickSkins",skin.Id,Catalog,false) end) end,4))
 assert(not Data:get(purchase) and purchase.Kicked and not Data:mutate(purchase,function(d) d.Cash+=999; return true end))
 faults.Writes[ns]=nil; tick(5); assert(Data:load(purchase))
 local recoveredPurchase=Data:get(purchase)
-assert(recoveredPurchase.Cash==1000-skin.Price and recoveredPurchase.Inventory.BrickSkins[skin.Id])
+assert(recoveredPurchase.Cash==125000-skin.Price and recoveredPurchase.Inventory.BrickSkins[skin.Id])
 assert(not Data:mutate(purchase,function(d) return P.purchase(d,"BrickSkins",skin.Id,Catalog,false) end))
 print("PASS ambiguous save failure closes access and preserves the atomic Cash/ownership pair without free or duplicate items")
 local duplicate=player(909); assert(not Data:load(duplicate)); assert(Data:get(purchase) and not Data:get(duplicate))
@@ -3204,7 +3218,31 @@ local function persist(player,result)
 end
 local function playerProfile(player)
 	local d=Data:get(player)
-	return {UserId=player.UserId,Name=player.Name,DisplayName=player.DisplayName,Rank=d and P.Ranks[d.Rank.Tier] or "Rookie",Stars=d and d.Rank.Stars or 0,Rating=d and d.Rank.Rating or 1000,Equipped=d and P.clone(d.Equipped) or {}}
+	return {UserId=player.UserId,Name=player.Name,DisplayName=player.DisplayName,Rank=d and P.Ranks[d.Rank.Tier] or "Rookie",Tier=d and d.Rank.Tier or 1,Stars=d and d.Rank.Stars or 0,Rating=d and d.Rank.Rating or 1000,Equipped=d and P.clone(d.Equipped) or {}}
+end
+local function battleEvent(room,kind,values)
+	room.EventId=(room.EventId or 0)+1; values.Kind=kind; values.Id=room.EventId; values.MatchId=room.Id
+	for _,p in ipairs(room.Players) do send(p,"BattleEvent",values) end
+end
+local function deliver(room,player,attack)
+	if attack<=0 or room.Ended then return end
+	local other=room.Players[1]==player and room.Players[2] or room.Players[1]; local target=S.Sessions[other]
+	if not target then return end
+	E.addGarbage(target.Engine,attack)
+	battleEvent(room,"Attack",{From=player.UserId,To=other.UserId,Lines=attack})
+end
+local function recoverKO(room,player,now)
+	local session=S.Sessions[player]; if session.RespawnAt then return end
+	local other=room.Players[1]==player and room.Players[2] or room.Players[1]
+	S.Sessions[other].Engine.stats.KOs+=1; session.RespawnAt=now+R.KORecovery; E.release(session.Engine)
+	battleEvent(room,"KO",{Player=player.UserId,Winner=other.UserId,RecoverAt=session.RespawnAt})
+end
+local function respawn(session)
+	local old=session.Engine; local fresh=E.new(old.bagSeed, R)
+	-- Carry cumulative verified statistics and event sequence; reset board/hold/combo/pending.
+	fresh.score=old.score; fresh.lines=old.lines; fresh.level=old.level; fresh.elapsed=old.elapsed; fresh.stats=old.stats
+	fresh.sequence=old.sequence; fresh.events=old.events; fresh.queue=table.clone(old.queue); fresh.bagSeed=old.bagSeed; fresh.garbageSeed=old.garbageSeed
+	E.spawn(fresh); session.Engine=fresh; session.RespawnAt=nil
 end
 local function refund(room)
 	for player,charged in pairs(room.Charged) do if charged then room.Charged[player]=false; persist(player,{id=room.Id..":refund",kind="Refund",roomId=room.Id}) end end
@@ -3218,7 +3256,7 @@ local function resultFor(room,player,winner,reason)
 		local key=tostring(other.UserId); local pair=d.Pairs[key]; local day=math.floor(os.time()/86400)
 		if pair and pair.Day==day and (pair.Count>=C.PairRewardsPerDay or os.time()-pair.Last<C.OpponentRewardCooldown) then eligible=false end
 	end
-	return {id=room.Id,outcome=outcome,score=session.Engine.score,lines=session.Engine.lines,spins=st.TSpins,tetrises=st.Tetrises,perfect=st.PerfectClears,sent=st.Sent,kos=winner==player and reason=="KO" and 1 or 0,startTier=start.Tier,startRating=start.Rating,opponentRating=room.Profiles[other].Rating,rewardEligible=eligible,opponentId=other.UserId,day=math.floor(os.time()/86400),timestamp=os.time()}
+	return {id=room.Id,outcome=outcome,score=session.Engine.score,lines=session.Engine.lines,spins=st.TSpins,tetrises=st.Tetrises,perfect=st.PerfectClears,sent=st.Sent,kos=st.KOs,startTier=start.Tier,startRating=start.Rating,opponentRating=room.Profiles[other].Rating,rewardEligible=eligible,opponentId=other.UserId,day=math.floor(os.time()/86400),timestamp=os.time()}
 end
 local function finish(room,winner,reason)
 	if room.Ended then return end
@@ -3240,7 +3278,7 @@ local function finish(room,winner,reason)
 		local after=Data:get(player)
 		local other=room.Players[1]==player and room.Players[2] or room.Players[1]
 		local payload={Outcome=summary.outcome,Reason=reason,Own=E.pack(session.Engine),Opponent=E.pack(S.Sessions[other].Engine),Profiles=room.PublicProfiles,Ranked=room.Ranked,Rewards=summary.rewardEligible and settled,SettlementPending=not settled,
-			Cash=before and after and after.Cash-before.Cash or 0,BeforeRank=before and before.Rank,AfterRank=after and P.clone(after.Rank),Id=room.Id}
+			Cash=settled and room.Ranked and summary.rewardEligible and summary.outcome=="Win" and C.WinCash[summary.startTier] or 0,BeforeRank=before and before.Rank,AfterRank=after and P.clone(after.Rank),Id=room.Id}
 		S.Results[player]={Other=other,Ready=false,Ranked=room.Ranked}; send(player,"Result",payload)
 	end
 	for _,player in ipairs(room.Players) do S.Sessions[player]=nil end
@@ -3259,7 +3297,7 @@ local function startPair(a,b,ranked)
 	for _,player in ipairs(room.Players) do
 		room.Profiles[player]=P.clone(Data:get(player).Rank)
 		S.Sessions[player]={Room=room,Engine=E.new(seed,R),Mode=ranked and "Ranked" or "Challenge"}
-		send(player,"Found",{Profiles=room.PublicProfiles,Ranked=ranked})
+		send(player,"Found",{Profiles=room.PublicProfiles,Ranked=ranked,MatchId=room.Id})
 	end
 	for _,player in ipairs(room.Players) do
 		if ranked and not (Data.Debug and C.InfiniteEnergyInDebug) then
@@ -3290,7 +3328,7 @@ end
 local function solo(player)
 	leave(player); S.Results[player]=nil
 	if S.Sessions[player] then return end
-	S.Sessions[player]={Id=Http:GenerateGUID(false),Engine=E.new(math.random(1,2147483646),R),Mode="Solo"}
+	S.Sessions[player]={Id=Http:GenerateGUID(false),Engine=E.new(math.random(1,2147483646),R),Mode="Solo",StartAt=workspace:GetServerTimeNow()+R.Countdown}
 end
 local function queue(player)
 	if S.Sessions[player] then return end
@@ -3322,8 +3360,12 @@ local function command(player,kind,payload)
 		local ok,text=Data:mutate(player,function(d) return P.claimQuest(d,payload.Group,payload.Id,C) end); profile(player); message(player,text); if ok then send(player,"Action",{Sound="QuestClaim"}) end
 	elseif kind=="Login" then local ok,text=Data:mutate(player,function(d) return P.login(d,os.time(),C) end); profile(player); message(player,text); if ok then send(player,"Action",{Sound="CashEarned"}) end
 	elseif kind=="Leaderboard" then
-		if type(payload)~="string" then return end
-		local rows,text=Leaders:read(player,payload); send(player,"Leaderboard",{Rows=rows or {},Kind=payload,Notice=text,Unavailable=not rows})
+		-- Legacy string requests remain supported. Echo the bounded request identity for race filtering.
+		local category=type(payload)=="table" and payload.Kind or payload
+		local requestId=type(payload)=="table" and payload.RequestId or nil
+		if type(category)~="string" or not ({GlobalRating=true,GlobalWins=true,SeasonRating=true,SeasonWins=true})[category] then return end
+		if requestId~=nil and (type(requestId)~="number" or requestId<1 or requestId>2147483647 or requestId%1~=0) then return end
+		local rows,text=Leaders:read(player,category); send(player,"Leaderboard",{Rows=rows or {},Kind=category,RequestId=requestId,Notice=text,Unavailable=not rows})
 	elseif kind=="Challenge" then
 		if type(payload)~="number" or S.Sessions[player] then return end
 		local other=Players:GetPlayerByUserId(payload); if not other or other==player or S.Sessions[other] then return end
@@ -3335,7 +3377,11 @@ local function command(player,kind,payload)
 		if invitation and invitation.Expires>os.clock() and invitation.From.Parent==Players then startPair(player,invitation.From,false) end
 	elseif kind=="Settings" then
 		if type(payload)~="table" then return end
-		Data:mutate(player,function(d) if type(payload.Sound)=="boolean" then d.Settings.Sound=payload.Sound end; if type(payload.ReducedMotion)=="boolean" then d.Settings.ReducedMotion=payload.ReducedMotion end; return true end); profile(player)
+		Data:mutate(player,function(d) if type(payload.Sound)=="boolean" then d.Settings.Sound=payload.Sound end; if type(payload.ReducedMotion)=="boolean" then d.Settings.ReducedMotion=payload.ReducedMotion end; for _,field in ipairs({"ClassicHUD","SwapRotation"}) do if type(payload[field])=="boolean" then d.Settings[field]=payload[field] end end; for _,field in ipairs({"Master","MusicVolume","SFXVolume","UIScale"}) do local value=payload[field]; if type(value)=="number" and value==value and math.abs(value)<=1000 then d.Settings[field]=math.clamp(value,field=="UIScale" and 0.9 or 0,1) end end; return true end); profile(player)
+	elseif kind=="Emote" then
+		local session=S.Sessions[player]; if not session or not session.Room or session.Room.Ended or type(payload)~="number" or payload%1~=0 or not R.Emotes[payload] then return end
+		local now=workspace:GetServerTimeNow(); if now<(session.EmoteAt or 0) then return end; session.EmoteAt=now+R.EmoteCooldown
+		battleEvent(session.Room,"Emote",{From=player.UserId,Text=R.Emotes[payload]})
 	end
 end
 Network.OnServerEvent:Connect(function(player,kind,payload)
@@ -3345,16 +3391,27 @@ Network.OnServerEvent:Connect(function(player,kind,payload)
 	if kind=="Input" then
 		if type(payload)~="table" or not validInputs[payload.Action] or type(payload.Down)~="boolean" then return end
 		local session=S.Sessions[player]
-		if not session or (session.Room and (session.Room.Ended or not session.Room.Started)) then return end
+		if not session or (session.Room and (session.Room.Ended or not session.Room.Started or workspace:GetServerTimeNow()>=session.Room.EndAt)) or session.StartAt and workspace:GetServerTimeNow()<session.StartAt or session.RespawnAt then return end
 		-- A rate-limited press must never prevent releasing an already held key.
 		if not session.Engine or b.Input<1 and (payload.Down or not session.Engine.controls[payload.Action]) then return end
 		b.Input=math.max(0,b.Input-1)
 		if payload.Action=="HardDrop" and payload.Down then if now-(session.LastDrop or 0)<0.08 then return end; session.LastDrop=now end
-		local attack=E.input(session.Engine,payload.Action,payload.Down)
-		if attack>0 and session.Room then local other=session.Room.Players[1]==player and session.Room.Players[2] or session.Room.Players[1]; if S.Sessions[other] then E.addGarbage(S.Sessions[other].Engine,attack) end end
+		local beforeEvent=session.Engine.sequence
+  local equipped=Data:get(player) and Data:get(player).Equipped
+  local dropTheme=equipped and equipped.DropEffect
+  local attack=E.input(session.Engine,payload.Action,payload.Down)
+  if payload.Action=="HardDrop" and payload.Down then
+   for _,event in ipairs(session.Engine.events) do if event.id>beforeEvent and event.name=="HardDrop" then event.data.DropEffect=dropTheme end end
+  end
+		if attack>0 and session.Room then deliver(session.Room,player,attack) end
 		return
 	end
-	if b.Command<1 or S.Busy[player] then return end; b.Command-=1; S.Busy[player]=true
+	if b.Command<1 or S.Busy[player] then
+  if kind=="Leaderboard" and type(payload)=="table" and type(payload.Kind)=="string" and type(payload.RequestId)=="number" then
+   send(player,"Leaderboard",{Kind=payload.Kind,RequestId=payload.RequestId,Rows={},Unavailable=true,Notice="Server busy. Please retry in a moment.",RetryAfter=0.6})
+  end
+  return
+ end; b.Command-=1; S.Busy[player]=true
 	local ok,err=pcall(command,player,kind,payload); S.Busy[player]=nil
 	if not ok then warn("[Tetris server] "..tostring(err)); message(player,"Operation failed; please retry") end
 end)
@@ -3367,9 +3424,9 @@ RunService.Heartbeat:Connect(function(dt)
 		accumulator-=1/60
 		for player,session in pairs(S.Sessions) do
 			local room=session.Room
-			if session.Engine and (not room or room.Started and not room.Ended) then
+			if session.Engine and not session.RespawnAt and (not session.StartAt or now>=session.StartAt) and (not room or room.Started and not room.Ended and now<room.EndAt) then
 				local attack=E.step(session.Engine,1/60)
-				if room and attack>0 then local other=room.Players[1]==player and room.Players[2] or room.Players[1]; if S.Sessions[other] then E.addGarbage(S.Sessions[other].Engine,attack) end end
+				if room and attack>0 then deliver(room,player,attack) end
 			end
 		end
 	end
@@ -3378,14 +3435,19 @@ RunService.Heartbeat:Connect(function(dt)
 			room.Played=math.max(0,now-room.StartAt)
 			local a,b=room.Players[1],room.Players[2]; local sa,sb=S.Sessions[a],S.Sessions[b]
 			if sa and sb then
-				if not sa.Engine.alive or not sb.Engine.alive then
+				if (not room.Ranked or not R.TimedKO) and (not sa.Engine.alive or not sb.Engine.alive) then
 					local winner=sa.Engine.alive and a or sb.Engine.alive and b or nil
 					task.spawn(finish,room,winner,"KO")
 				elseif now>=room.EndAt then
 					-- Deterministic policy: sent garbage, then cleared lines, then score.
 					local winner
-					for _,values in ipairs({{sa.Engine.stats.Sent,sb.Engine.stats.Sent},{sa.Engine.lines,sb.Engine.lines},{sa.Engine.score,sb.Engine.score}}) do if values[1]~=values[2] then winner=values[1]>values[2] and a or b; break end end
+					for _,values in ipairs({{sa.Engine.stats.KOs,sb.Engine.stats.KOs},{sa.Engine.stats.Sent,sb.Engine.stats.Sent},{sa.Engine.lines,sb.Engine.lines},{sa.Engine.score,sb.Engine.score}}) do if values[1]~=values[2] then winner=values[1]>values[2] and a or b; break end end
 					task.spawn(finish,room,winner,"Time expired")
+				elseif room.Ranked and R.TimedKO then
+					for _,p in ipairs(room.Players) do local session=S.Sessions[p]
+						if not session.Engine.alive and not session.RespawnAt then recoverKO(room,p,now) end
+						if session.RespawnAt and now>=session.RespawnAt then respawn(session) end
+					end
 				end
 			end
 		end
@@ -3396,7 +3458,8 @@ RunService.Heartbeat:Connect(function(dt)
 			local room=session.Room
 			if session.Engine and (not room or not room.Ended) then
 				local other=room and (room.Players[1]==player and room.Players[2] or room.Players[1]); local osession=other and S.Sessions[other]
-				send(player,"State",{Mode=session.Mode,Own=E.pack(session.Engine),Opponent=osession and E.pack(osession.Engine),Profiles=room and room.PublicProfiles,Countdown=room and not room.Started and math.max(0,math.ceil((room.StartAt or now+3)-now)) or 0,Remaining=room and room.Started and math.max(0,room.EndAt-now) or nil,Round=1})
+				local start=room and room.StartAt or session.StartAt
+				send(player,"State",{Mode=session.Mode,MatchId=room and room.Id or session.Id,StartAt=start,EndAt=room and room.EndAt,ServerNow=now,Own=E.pack(session.Engine),Opponent=osession and E.pack(osession.Engine),Profiles=room and room.PublicProfiles,Countdown=start and math.max(0,math.ceil(start-now)) or room and not room.Started and R.Countdown or 0,Remaining=room and (room.Started and math.max(0,room.EndAt-now) or R.MatchDuration) or nil,RespawnAt=session.RespawnAt,Round=1})
 			end
 		end
 	end
@@ -3469,20 +3532,20 @@ for category,slot in pairs(Catalog.Slots) do
 end
 print("PASS all four default cosmetics equip through the real remote without spending Cash")
 local chosen={}; assert(Data:mutate(shopper,function(d)
-	d.Cash=1200
+	d.Cash=125000
 	for category in pairs(Catalog.Slots) do local item=Catalog.list(category)[2]; chosen[category]=item.Id; d.Inventory[category][item.Id]=true end
 	return true
 end))
 for category,slot in pairs(Catalog.Slots) do
 	for _,id in ipairs({chosen[category],"Default",chosen[category]}) do
 		local reply=request(category,id); assert(reply.Success and reply.Category==category and reply.Id==id)
-		assert(Data:get(shopper).Equipped[slot]==id and Data:get(shopper).Cash==1200)
+		assert(Data:get(shopper).Equipped[slot]==id and Data:get(shopper).Cash==125000)
 	end
 end
 print("PASS repeated owned skin/drop/ghost/sound equips preserve Cash and return accurate success payloads")
 local missing=Catalog.list("BrickSkins")[3].Id; local reply=request("BrickSkins",missing)
 assert(not reply.Success and reply.Code=="NotOwned" and reply.Message=="You don't own this cosmetic yet.")
-assert(Data:get(shopper).Equipped.BrickSkin==chosen.BrickSkins and Data:get(shopper).Cash==1200)
+assert(Data:get(shopper).Equipped.BrickSkin==chosen.BrickSkins and Data:get(shopper).Cash==125000)
 for _,pair in ipairs({{"BrickSkins","Missing"},{"Unknown","Default"},{"HardDropEffects","Default"}}) do
 	reply=request(pair[1],pair[2]); assert(not reply.Success and reply.Code=="Unavailable")
 end
@@ -3491,7 +3554,7 @@ print("PASS unowned, mismatched and malformed cosmetic requests reject without c
 -- Exercise the import on Buy as well; then equip an actually purchased item.
 S.Buckets={}; send(shopper,"Buy",{Category="BrickSkins",Id=missing}); tick(0.1)
 assert(sent[shopper].CosmeticResult.Success and Data:get(shopper).Inventory.BrickSkins[missing])
-balance=1200-Catalog.Items["BrickSkins:"..missing].Price
+balance=125000-Catalog.Items["BrickSkins:"..missing].Price
 reply=request("BrickSkins",missing); assert(reply.Success and Data:get(shopper).Cash==balance); chosen.BrickSkins=missing
 Data:release(shopper); tick(0.1)
 local reloaded; task.spawn(function() reloaded=Data:load(shopper) end); tick(0.3); assert(reloaded)
@@ -3745,7 +3808,31 @@ local function persist(player,result)
 end
 local function playerProfile(player)
 	local d=Data:get(player)
-	return {UserId=player.UserId,Name=player.Name,DisplayName=player.DisplayName,Rank=d and P.Ranks[d.Rank.Tier] or "Rookie",Stars=d and d.Rank.Stars or 0,Rating=d and d.Rank.Rating or 1000,Equipped=d and P.clone(d.Equipped) or {}}
+	return {UserId=player.UserId,Name=player.Name,DisplayName=player.DisplayName,Rank=d and P.Ranks[d.Rank.Tier] or "Rookie",Tier=d and d.Rank.Tier or 1,Stars=d and d.Rank.Stars or 0,Rating=d and d.Rank.Rating or 1000,Equipped=d and P.clone(d.Equipped) or {}}
+end
+local function battleEvent(room,kind,values)
+	room.EventId=(room.EventId or 0)+1; values.Kind=kind; values.Id=room.EventId; values.MatchId=room.Id
+	for _,p in ipairs(room.Players) do send(p,"BattleEvent",values) end
+end
+local function deliver(room,player,attack)
+	if attack<=0 or room.Ended then return end
+	local other=room.Players[1]==player and room.Players[2] or room.Players[1]; local target=S.Sessions[other]
+	if not target then return end
+	E.addGarbage(target.Engine,attack)
+	battleEvent(room,"Attack",{From=player.UserId,To=other.UserId,Lines=attack})
+end
+local function recoverKO(room,player,now)
+	local session=S.Sessions[player]; if session.RespawnAt then return end
+	local other=room.Players[1]==player and room.Players[2] or room.Players[1]
+	S.Sessions[other].Engine.stats.KOs+=1; session.RespawnAt=now+R.KORecovery; E.release(session.Engine)
+	battleEvent(room,"KO",{Player=player.UserId,Winner=other.UserId,RecoverAt=session.RespawnAt})
+end
+local function respawn(session)
+	local old=session.Engine; local fresh=E.new(old.bagSeed, R)
+	-- Carry cumulative verified statistics and event sequence; reset board/hold/combo/pending.
+	fresh.score=old.score; fresh.lines=old.lines; fresh.level=old.level; fresh.elapsed=old.elapsed; fresh.stats=old.stats
+	fresh.sequence=old.sequence; fresh.events=old.events; fresh.queue=table.clone(old.queue); fresh.bagSeed=old.bagSeed; fresh.garbageSeed=old.garbageSeed
+	E.spawn(fresh); session.Engine=fresh; session.RespawnAt=nil
 end
 local function refund(room)
 	for player,charged in pairs(room.Charged) do if charged then room.Charged[player]=false; persist(player,{id=room.Id..":refund",kind="Refund",roomId=room.Id}) end end
@@ -3759,7 +3846,7 @@ local function resultFor(room,player,winner,reason)
 		local key=tostring(other.UserId); local pair=d.Pairs[key]; local day=math.floor(os.time()/86400)
 		if pair and pair.Day==day and (pair.Count>=C.PairRewardsPerDay or os.time()-pair.Last<C.OpponentRewardCooldown) then eligible=false end
 	end
-	return {id=room.Id,outcome=outcome,score=session.Engine.score,lines=session.Engine.lines,spins=st.TSpins,tetrises=st.Tetrises,perfect=st.PerfectClears,sent=st.Sent,kos=winner==player and reason=="KO" and 1 or 0,startTier=start.Tier,startRating=start.Rating,opponentRating=room.Profiles[other].Rating,rewardEligible=eligible,opponentId=other.UserId,day=math.floor(os.time()/86400),timestamp=os.time()}
+	return {id=room.Id,outcome=outcome,score=session.Engine.score,lines=session.Engine.lines,spins=st.TSpins,tetrises=st.Tetrises,perfect=st.PerfectClears,sent=st.Sent,kos=st.KOs,startTier=start.Tier,startRating=start.Rating,opponentRating=room.Profiles[other].Rating,rewardEligible=eligible,opponentId=other.UserId,day=math.floor(os.time()/86400),timestamp=os.time()}
 end
 local function finish(room,winner,reason)
 	if room.Ended then return end
@@ -3781,7 +3868,7 @@ local function finish(room,winner,reason)
 		local after=Data:get(player)
 		local other=room.Players[1]==player and room.Players[2] or room.Players[1]
 		local payload={Outcome=summary.outcome,Reason=reason,Own=E.pack(session.Engine),Opponent=E.pack(S.Sessions[other].Engine),Profiles=room.PublicProfiles,Ranked=room.Ranked,Rewards=summary.rewardEligible and settled,SettlementPending=not settled,
-			Cash=before and after and after.Cash-before.Cash or 0,BeforeRank=before and before.Rank,AfterRank=after and P.clone(after.Rank),Id=room.Id}
+			Cash=settled and room.Ranked and summary.rewardEligible and summary.outcome=="Win" and C.WinCash[summary.startTier] or 0,BeforeRank=before and before.Rank,AfterRank=after and P.clone(after.Rank),Id=room.Id}
 		S.Results[player]={Other=other,Ready=false,Ranked=room.Ranked}; send(player,"Result",payload)
 	end
 	for _,player in ipairs(room.Players) do S.Sessions[player]=nil end
@@ -3800,7 +3887,7 @@ local function startPair(a,b,ranked)
 	for _,player in ipairs(room.Players) do
 		room.Profiles[player]=P.clone(Data:get(player).Rank)
 		S.Sessions[player]={Room=room,Engine=E.new(seed,R),Mode=ranked and "Ranked" or "Challenge"}
-		send(player,"Found",{Profiles=room.PublicProfiles,Ranked=ranked})
+		send(player,"Found",{Profiles=room.PublicProfiles,Ranked=ranked,MatchId=room.Id})
 	end
 	for _,player in ipairs(room.Players) do
 		if ranked and not (Data.Debug and C.InfiniteEnergyInDebug) then
@@ -3831,7 +3918,7 @@ end
 local function solo(player)
 	leave(player); S.Results[player]=nil
 	if S.Sessions[player] then return end
-	S.Sessions[player]={Id=Http:GenerateGUID(false),Engine=E.new(math.random(1,2147483646),R),Mode="Solo"}
+	S.Sessions[player]={Id=Http:GenerateGUID(false),Engine=E.new(math.random(1,2147483646),R),Mode="Solo",StartAt=workspace:GetServerTimeNow()+R.Countdown}
 end
 local function queue(player)
 	if S.Sessions[player] then return end
@@ -3863,8 +3950,12 @@ local function command(player,kind,payload)
 		local ok,text=Data:mutate(player,function(d) return P.claimQuest(d,payload.Group,payload.Id,C) end); profile(player); message(player,text); if ok then send(player,"Action",{Sound="QuestClaim"}) end
 	elseif kind=="Login" then local ok,text=Data:mutate(player,function(d) return P.login(d,os.time(),C) end); profile(player); message(player,text); if ok then send(player,"Action",{Sound="CashEarned"}) end
 	elseif kind=="Leaderboard" then
-		if type(payload)~="string" then return end
-		local rows,text=Leaders:read(player,payload); send(player,"Leaderboard",{Rows=rows or {},Kind=payload,Notice=text,Unavailable=not rows})
+		-- Legacy string requests remain supported. Echo the bounded request identity for race filtering.
+		local category=type(payload)=="table" and payload.Kind or payload
+		local requestId=type(payload)=="table" and payload.RequestId or nil
+		if type(category)~="string" or not ({GlobalRating=true,GlobalWins=true,SeasonRating=true,SeasonWins=true})[category] then return end
+		if requestId~=nil and (type(requestId)~="number" or requestId<1 or requestId>2147483647 or requestId%1~=0) then return end
+		local rows,text=Leaders:read(player,category); send(player,"Leaderboard",{Rows=rows or {},Kind=category,RequestId=requestId,Notice=text,Unavailable=not rows})
 	elseif kind=="Challenge" then
 		if type(payload)~="number" or S.Sessions[player] then return end
 		local other=Players:GetPlayerByUserId(payload); if not other or other==player or S.Sessions[other] then return end
@@ -3876,7 +3967,11 @@ local function command(player,kind,payload)
 		if invitation and invitation.Expires>os.clock() and invitation.From.Parent==Players then startPair(player,invitation.From,false) end
 	elseif kind=="Settings" then
 		if type(payload)~="table" then return end
-		Data:mutate(player,function(d) if type(payload.Sound)=="boolean" then d.Settings.Sound=payload.Sound end; if type(payload.ReducedMotion)=="boolean" then d.Settings.ReducedMotion=payload.ReducedMotion end; return true end); profile(player)
+		Data:mutate(player,function(d) if type(payload.Sound)=="boolean" then d.Settings.Sound=payload.Sound end; if type(payload.ReducedMotion)=="boolean" then d.Settings.ReducedMotion=payload.ReducedMotion end; for _,field in ipairs({"ClassicHUD","SwapRotation"}) do if type(payload[field])=="boolean" then d.Settings[field]=payload[field] end end; for _,field in ipairs({"Master","MusicVolume","SFXVolume","UIScale"}) do local value=payload[field]; if type(value)=="number" and value==value and math.abs(value)<=1000 then d.Settings[field]=math.clamp(value,field=="UIScale" and 0.9 or 0,1) end end; return true end); profile(player)
+	elseif kind=="Emote" then
+		local session=S.Sessions[player]; if not session or not session.Room or session.Room.Ended or type(payload)~="number" or payload%1~=0 or not R.Emotes[payload] then return end
+		local now=workspace:GetServerTimeNow(); if now<(session.EmoteAt or 0) then return end; session.EmoteAt=now+R.EmoteCooldown
+		battleEvent(session.Room,"Emote",{From=player.UserId,Text=R.Emotes[payload]})
 	end
 end
 Network.OnServerEvent:Connect(function(player,kind,payload)
@@ -3886,16 +3981,27 @@ Network.OnServerEvent:Connect(function(player,kind,payload)
 	if kind=="Input" then
 		if type(payload)~="table" or not validInputs[payload.Action] or type(payload.Down)~="boolean" then return end
 		local session=S.Sessions[player]
-		if not session or (session.Room and (session.Room.Ended or not session.Room.Started)) then return end
+		if not session or (session.Room and (session.Room.Ended or not session.Room.Started or workspace:GetServerTimeNow()>=session.Room.EndAt)) or session.StartAt and workspace:GetServerTimeNow()<session.StartAt or session.RespawnAt then return end
 		-- A rate-limited press must never prevent releasing an already held key.
 		if not session.Engine or b.Input<1 and (payload.Down or not session.Engine.controls[payload.Action]) then return end
 		b.Input=math.max(0,b.Input-1)
 		if payload.Action=="HardDrop" and payload.Down then if now-(session.LastDrop or 0)<0.08 then return end; session.LastDrop=now end
-		local attack=E.input(session.Engine,payload.Action,payload.Down)
-		if attack>0 and session.Room then local other=session.Room.Players[1]==player and session.Room.Players[2] or session.Room.Players[1]; if S.Sessions[other] then E.addGarbage(S.Sessions[other].Engine,attack) end end
+		local beforeEvent=session.Engine.sequence
+  local equipped=Data:get(player) and Data:get(player).Equipped
+  local dropTheme=equipped and equipped.DropEffect
+  local attack=E.input(session.Engine,payload.Action,payload.Down)
+  if payload.Action=="HardDrop" and payload.Down then
+   for _,event in ipairs(session.Engine.events) do if event.id>beforeEvent and event.name=="HardDrop" then event.data.DropEffect=dropTheme end end
+  end
+		if attack>0 and session.Room then deliver(session.Room,player,attack) end
 		return
 	end
-	if b.Command<1 or S.Busy[player] then return end; b.Command-=1; S.Busy[player]=true
+	if b.Command<1 or S.Busy[player] then
+  if kind=="Leaderboard" and type(payload)=="table" and type(payload.Kind)=="string" and type(payload.RequestId)=="number" then
+   send(player,"Leaderboard",{Kind=payload.Kind,RequestId=payload.RequestId,Rows={},Unavailable=true,Notice="Server busy. Please retry in a moment.",RetryAfter=0.6})
+  end
+  return
+ end; b.Command-=1; S.Busy[player]=true
 	local ok,err=pcall(command,player,kind,payload); S.Busy[player]=nil
 	if not ok then warn("[Tetris server] "..tostring(err)); message(player,"Operation failed; please retry") end
 end)
@@ -3908,9 +4014,9 @@ RunService.Heartbeat:Connect(function(dt)
 		accumulator-=1/60
 		for player,session in pairs(S.Sessions) do
 			local room=session.Room
-			if session.Engine and (not room or room.Started and not room.Ended) then
+			if session.Engine and not session.RespawnAt and (not session.StartAt or now>=session.StartAt) and (not room or room.Started and not room.Ended and now<room.EndAt) then
 				local attack=E.step(session.Engine,1/60)
-				if room and attack>0 then local other=room.Players[1]==player and room.Players[2] or room.Players[1]; if S.Sessions[other] then E.addGarbage(S.Sessions[other].Engine,attack) end end
+				if room and attack>0 then deliver(room,player,attack) end
 			end
 		end
 	end
@@ -3919,14 +4025,19 @@ RunService.Heartbeat:Connect(function(dt)
 			room.Played=math.max(0,now-room.StartAt)
 			local a,b=room.Players[1],room.Players[2]; local sa,sb=S.Sessions[a],S.Sessions[b]
 			if sa and sb then
-				if not sa.Engine.alive or not sb.Engine.alive then
+				if (not room.Ranked or not R.TimedKO) and (not sa.Engine.alive or not sb.Engine.alive) then
 					local winner=sa.Engine.alive and a or sb.Engine.alive and b or nil
 					task.spawn(finish,room,winner,"KO")
 				elseif now>=room.EndAt then
 					-- Deterministic policy: sent garbage, then cleared lines, then score.
 					local winner
-					for _,values in ipairs({{sa.Engine.stats.Sent,sb.Engine.stats.Sent},{sa.Engine.lines,sb.Engine.lines},{sa.Engine.score,sb.Engine.score}}) do if values[1]~=values[2] then winner=values[1]>values[2] and a or b; break end end
+					for _,values in ipairs({{sa.Engine.stats.KOs,sb.Engine.stats.KOs},{sa.Engine.stats.Sent,sb.Engine.stats.Sent},{sa.Engine.lines,sb.Engine.lines},{sa.Engine.score,sb.Engine.score}}) do if values[1]~=values[2] then winner=values[1]>values[2] and a or b; break end end
 					task.spawn(finish,room,winner,"Time expired")
+				elseif room.Ranked and R.TimedKO then
+					for _,p in ipairs(room.Players) do local session=S.Sessions[p]
+						if not session.Engine.alive and not session.RespawnAt then recoverKO(room,p,now) end
+						if session.RespawnAt and now>=session.RespawnAt then respawn(session) end
+					end
 				end
 			end
 		end
@@ -3937,7 +4048,8 @@ RunService.Heartbeat:Connect(function(dt)
 			local room=session.Room
 			if session.Engine and (not room or not room.Ended) then
 				local other=room and (room.Players[1]==player and room.Players[2] or room.Players[1]); local osession=other and S.Sessions[other]
-				send(player,"State",{Mode=session.Mode,Own=E.pack(session.Engine),Opponent=osession and E.pack(osession.Engine),Profiles=room and room.PublicProfiles,Countdown=room and not room.Started and math.max(0,math.ceil((room.StartAt or now+3)-now)) or 0,Remaining=room and room.Started and math.max(0,room.EndAt-now) or nil,Round=1})
+				local start=room and room.StartAt or session.StartAt
+				send(player,"State",{Mode=session.Mode,MatchId=room and room.Id or session.Id,StartAt=start,EndAt=room and room.EndAt,ServerNow=now,Own=E.pack(session.Engine),Opponent=osession and E.pack(osession.Engine),Profiles=room and room.PublicProfiles,Countdown=start and math.max(0,math.ceil(start-now)) or room and not room.Started and R.Countdown or 0,Remaining=room and (room.Started and math.max(0,room.EndAt-now) or R.MatchDuration) or nil,RespawnAt=session.RespawnAt,Round=1})
 			end
 		end
 	end
@@ -4010,20 +4122,20 @@ for category,slot in pairs(Catalog.Slots) do
 end
 print("PASS all four default cosmetics equip through the real remote without spending Cash")
 local chosen={}; assert(Data:mutate(shopper,function(d)
-	d.Cash=1200
+	d.Cash=125000
 	for category in pairs(Catalog.Slots) do local item=Catalog.list(category)[2]; chosen[category]=item.Id; d.Inventory[category][item.Id]=true end
 	return true
 end))
 for category,slot in pairs(Catalog.Slots) do
 	for _,id in ipairs({chosen[category],"Default",chosen[category]}) do
 		local reply=request(category,id); assert(reply.Success and reply.Category==category and reply.Id==id)
-		assert(Data:get(shopper).Equipped[slot]==id and Data:get(shopper).Cash==1200)
+		assert(Data:get(shopper).Equipped[slot]==id and Data:get(shopper).Cash==125000)
 	end
 end
 print("PASS repeated owned skin/drop/ghost/sound equips preserve Cash and return accurate success payloads")
 local missing=Catalog.list("BrickSkins")[3].Id; local reply=request("BrickSkins",missing)
 assert(not reply.Success and reply.Code=="NotOwned" and reply.Message=="You don't own this cosmetic yet.")
-assert(Data:get(shopper).Equipped.BrickSkin==chosen.BrickSkins and Data:get(shopper).Cash==1200)
+assert(Data:get(shopper).Equipped.BrickSkin==chosen.BrickSkins and Data:get(shopper).Cash==125000)
 for _,pair in ipairs({{"BrickSkins","Missing"},{"Unknown","Default"},{"HardDropEffects","Default"}}) do
 	reply=request(pair[1],pair[2]); assert(not reply.Success and reply.Code=="Unavailable")
 end
@@ -4032,7 +4144,7 @@ print("PASS unowned, mismatched and malformed cosmetic requests reject without c
 -- Exercise the import on Buy as well; then equip an actually purchased item.
 S.Buckets={}; send(shopper,"Buy",{Category="BrickSkins",Id=missing}); tick(0.1)
 assert(sent[shopper].CosmeticResult.Success and Data:get(shopper).Inventory.BrickSkins[missing])
-balance=1200-Catalog.Items["BrickSkins:"..missing].Price
+balance=125000-Catalog.Items["BrickSkins:"..missing].Price
 reply=request("BrickSkins",missing); assert(reply.Success and Data:get(shopper).Cash==balance); chosen.BrickSkins=missing
 Data:release(shopper); tick(0.1)
 local reloaded; task.spawn(function() reloaded=Data:load(shopper) end); tick(0.3); assert(reloaded)
@@ -4286,7 +4398,31 @@ local function persist(player,result)
 end
 local function playerProfile(player)
 	local d=Data:get(player)
-	return {UserId=player.UserId,Name=player.Name,DisplayName=player.DisplayName,Rank=d and P.Ranks[d.Rank.Tier] or "Rookie",Stars=d and d.Rank.Stars or 0,Rating=d and d.Rank.Rating or 1000,Equipped=d and P.clone(d.Equipped) or {}}
+	return {UserId=player.UserId,Name=player.Name,DisplayName=player.DisplayName,Rank=d and P.Ranks[d.Rank.Tier] or "Rookie",Tier=d and d.Rank.Tier or 1,Stars=d and d.Rank.Stars or 0,Rating=d and d.Rank.Rating or 1000,Equipped=d and P.clone(d.Equipped) or {}}
+end
+local function battleEvent(room,kind,values)
+	room.EventId=(room.EventId or 0)+1; values.Kind=kind; values.Id=room.EventId; values.MatchId=room.Id
+	for _,p in ipairs(room.Players) do send(p,"BattleEvent",values) end
+end
+local function deliver(room,player,attack)
+	if attack<=0 or room.Ended then return end
+	local other=room.Players[1]==player and room.Players[2] or room.Players[1]; local target=S.Sessions[other]
+	if not target then return end
+	E.addGarbage(target.Engine,attack)
+	battleEvent(room,"Attack",{From=player.UserId,To=other.UserId,Lines=attack})
+end
+local function recoverKO(room,player,now)
+	local session=S.Sessions[player]; if session.RespawnAt then return end
+	local other=room.Players[1]==player and room.Players[2] or room.Players[1]
+	S.Sessions[other].Engine.stats.KOs+=1; session.RespawnAt=now+R.KORecovery; E.release(session.Engine)
+	battleEvent(room,"KO",{Player=player.UserId,Winner=other.UserId,RecoverAt=session.RespawnAt})
+end
+local function respawn(session)
+	local old=session.Engine; local fresh=E.new(old.bagSeed, R)
+	-- Carry cumulative verified statistics and event sequence; reset board/hold/combo/pending.
+	fresh.score=old.score; fresh.lines=old.lines; fresh.level=old.level; fresh.elapsed=old.elapsed; fresh.stats=old.stats
+	fresh.sequence=old.sequence; fresh.events=old.events; fresh.queue=table.clone(old.queue); fresh.bagSeed=old.bagSeed; fresh.garbageSeed=old.garbageSeed
+	E.spawn(fresh); session.Engine=fresh; session.RespawnAt=nil
 end
 local function refund(room)
 	for player,charged in pairs(room.Charged) do if charged then room.Charged[player]=false; persist(player,{id=room.Id..":refund",kind="Refund",roomId=room.Id}) end end
@@ -4300,7 +4436,7 @@ local function resultFor(room,player,winner,reason)
 		local key=tostring(other.UserId); local pair=d.Pairs[key]; local day=math.floor(os.time()/86400)
 		if pair and pair.Day==day and (pair.Count>=C.PairRewardsPerDay or os.time()-pair.Last<C.OpponentRewardCooldown) then eligible=false end
 	end
-	return {id=room.Id,outcome=outcome,score=session.Engine.score,lines=session.Engine.lines,spins=st.TSpins,tetrises=st.Tetrises,perfect=st.PerfectClears,sent=st.Sent,kos=winner==player and reason=="KO" and 1 or 0,startTier=start.Tier,startRating=start.Rating,opponentRating=room.Profiles[other].Rating,rewardEligible=eligible,opponentId=other.UserId,day=math.floor(os.time()/86400),timestamp=os.time()}
+	return {id=room.Id,outcome=outcome,score=session.Engine.score,lines=session.Engine.lines,spins=st.TSpins,tetrises=st.Tetrises,perfect=st.PerfectClears,sent=st.Sent,kos=st.KOs,startTier=start.Tier,startRating=start.Rating,opponentRating=room.Profiles[other].Rating,rewardEligible=eligible,opponentId=other.UserId,day=math.floor(os.time()/86400),timestamp=os.time()}
 end
 local function finish(room,winner,reason)
 	if room.Ended then return end
@@ -4322,7 +4458,7 @@ local function finish(room,winner,reason)
 		local after=Data:get(player)
 		local other=room.Players[1]==player and room.Players[2] or room.Players[1]
 		local payload={Outcome=summary.outcome,Reason=reason,Own=E.pack(session.Engine),Opponent=E.pack(S.Sessions[other].Engine),Profiles=room.PublicProfiles,Ranked=room.Ranked,Rewards=summary.rewardEligible and settled,SettlementPending=not settled,
-			Cash=before and after and after.Cash-before.Cash or 0,BeforeRank=before and before.Rank,AfterRank=after and P.clone(after.Rank),Id=room.Id}
+			Cash=settled and room.Ranked and summary.rewardEligible and summary.outcome=="Win" and C.WinCash[summary.startTier] or 0,BeforeRank=before and before.Rank,AfterRank=after and P.clone(after.Rank),Id=room.Id}
 		S.Results[player]={Other=other,Ready=false,Ranked=room.Ranked}; send(player,"Result",payload)
 	end
 	for _,player in ipairs(room.Players) do S.Sessions[player]=nil end
@@ -4341,7 +4477,7 @@ local function startPair(a,b,ranked)
 	for _,player in ipairs(room.Players) do
 		room.Profiles[player]=P.clone(Data:get(player).Rank)
 		S.Sessions[player]={Room=room,Engine=E.new(seed,R),Mode=ranked and "Ranked" or "Challenge"}
-		send(player,"Found",{Profiles=room.PublicProfiles,Ranked=ranked})
+		send(player,"Found",{Profiles=room.PublicProfiles,Ranked=ranked,MatchId=room.Id})
 	end
 	for _,player in ipairs(room.Players) do
 		if ranked and not (Data.Debug and C.InfiniteEnergyInDebug) then
@@ -4372,7 +4508,7 @@ end
 local function solo(player)
 	leave(player); S.Results[player]=nil
 	if S.Sessions[player] then return end
-	S.Sessions[player]={Id=Http:GenerateGUID(false),Engine=E.new(math.random(1,2147483646),R),Mode="Solo"}
+	S.Sessions[player]={Id=Http:GenerateGUID(false),Engine=E.new(math.random(1,2147483646),R),Mode="Solo",StartAt=workspace:GetServerTimeNow()+R.Countdown}
 end
 local function queue(player)
 	if S.Sessions[player] then return end
@@ -4404,8 +4540,12 @@ local function command(player,kind,payload)
 		local ok,text=Data:mutate(player,function(d) return P.claimQuest(d,payload.Group,payload.Id,C) end); profile(player); message(player,text); if ok then send(player,"Action",{Sound="QuestClaim"}) end
 	elseif kind=="Login" then local ok,text=Data:mutate(player,function(d) return P.login(d,os.time(),C) end); profile(player); message(player,text); if ok then send(player,"Action",{Sound="CashEarned"}) end
 	elseif kind=="Leaderboard" then
-		if type(payload)~="string" then return end
-		local rows,text=Leaders:read(player,payload); send(player,"Leaderboard",{Rows=rows or {},Kind=payload,Notice=text,Unavailable=not rows})
+		-- Legacy string requests remain supported. Echo the bounded request identity for race filtering.
+		local category=type(payload)=="table" and payload.Kind or payload
+		local requestId=type(payload)=="table" and payload.RequestId or nil
+		if type(category)~="string" or not ({GlobalRating=true,GlobalWins=true,SeasonRating=true,SeasonWins=true})[category] then return end
+		if requestId~=nil and (type(requestId)~="number" or requestId<1 or requestId>2147483647 or requestId%1~=0) then return end
+		local rows,text=Leaders:read(player,category); send(player,"Leaderboard",{Rows=rows or {},Kind=category,RequestId=requestId,Notice=text,Unavailable=not rows})
 	elseif kind=="Challenge" then
 		if type(payload)~="number" or S.Sessions[player] then return end
 		local other=Players:GetPlayerByUserId(payload); if not other or other==player or S.Sessions[other] then return end
@@ -4417,7 +4557,11 @@ local function command(player,kind,payload)
 		if invitation and invitation.Expires>os.clock() and invitation.From.Parent==Players then startPair(player,invitation.From,false) end
 	elseif kind=="Settings" then
 		if type(payload)~="table" then return end
-		Data:mutate(player,function(d) if type(payload.Sound)=="boolean" then d.Settings.Sound=payload.Sound end; if type(payload.ReducedMotion)=="boolean" then d.Settings.ReducedMotion=payload.ReducedMotion end; return true end); profile(player)
+		Data:mutate(player,function(d) if type(payload.Sound)=="boolean" then d.Settings.Sound=payload.Sound end; if type(payload.ReducedMotion)=="boolean" then d.Settings.ReducedMotion=payload.ReducedMotion end; for _,field in ipairs({"ClassicHUD","SwapRotation"}) do if type(payload[field])=="boolean" then d.Settings[field]=payload[field] end end; for _,field in ipairs({"Master","MusicVolume","SFXVolume","UIScale"}) do local value=payload[field]; if type(value)=="number" and value==value and math.abs(value)<=1000 then d.Settings[field]=math.clamp(value,field=="UIScale" and 0.9 or 0,1) end end; return true end); profile(player)
+	elseif kind=="Emote" then
+		local session=S.Sessions[player]; if not session or not session.Room or session.Room.Ended or type(payload)~="number" or payload%1~=0 or not R.Emotes[payload] then return end
+		local now=workspace:GetServerTimeNow(); if now<(session.EmoteAt or 0) then return end; session.EmoteAt=now+R.EmoteCooldown
+		battleEvent(session.Room,"Emote",{From=player.UserId,Text=R.Emotes[payload]})
 	end
 end
 Network.OnServerEvent:Connect(function(player,kind,payload)
@@ -4427,16 +4571,27 @@ Network.OnServerEvent:Connect(function(player,kind,payload)
 	if kind=="Input" then
 		if type(payload)~="table" or not validInputs[payload.Action] or type(payload.Down)~="boolean" then return end
 		local session=S.Sessions[player]
-		if not session or (session.Room and (session.Room.Ended or not session.Room.Started)) then return end
+		if not session or (session.Room and (session.Room.Ended or not session.Room.Started or workspace:GetServerTimeNow()>=session.Room.EndAt)) or session.StartAt and workspace:GetServerTimeNow()<session.StartAt or session.RespawnAt then return end
 		-- A rate-limited press must never prevent releasing an already held key.
 		if not session.Engine or b.Input<1 and (payload.Down or not session.Engine.controls[payload.Action]) then return end
 		b.Input=math.max(0,b.Input-1)
 		if payload.Action=="HardDrop" and payload.Down then if now-(session.LastDrop or 0)<0.08 then return end; session.LastDrop=now end
-		local attack=E.input(session.Engine,payload.Action,payload.Down)
-		if attack>0 and session.Room then local other=session.Room.Players[1]==player and session.Room.Players[2] or session.Room.Players[1]; if S.Sessions[other] then E.addGarbage(S.Sessions[other].Engine,attack) end end
+		local beforeEvent=session.Engine.sequence
+  local equipped=Data:get(player) and Data:get(player).Equipped
+  local dropTheme=equipped and equipped.DropEffect
+  local attack=E.input(session.Engine,payload.Action,payload.Down)
+  if payload.Action=="HardDrop" and payload.Down then
+   for _,event in ipairs(session.Engine.events) do if event.id>beforeEvent and event.name=="HardDrop" then event.data.DropEffect=dropTheme end end
+  end
+		if attack>0 and session.Room then deliver(session.Room,player,attack) end
 		return
 	end
-	if b.Command<1 or S.Busy[player] then return end; b.Command-=1; S.Busy[player]=true
+	if b.Command<1 or S.Busy[player] then
+  if kind=="Leaderboard" and type(payload)=="table" and type(payload.Kind)=="string" and type(payload.RequestId)=="number" then
+   send(player,"Leaderboard",{Kind=payload.Kind,RequestId=payload.RequestId,Rows={},Unavailable=true,Notice="Server busy. Please retry in a moment.",RetryAfter=0.6})
+  end
+  return
+ end; b.Command-=1; S.Busy[player]=true
 	local ok,err=pcall(command,player,kind,payload); S.Busy[player]=nil
 	if not ok then warn("[Tetris server] "..tostring(err)); message(player,"Operation failed; please retry") end
 end)
@@ -4449,9 +4604,9 @@ RunService.Heartbeat:Connect(function(dt)
 		accumulator-=1/60
 		for player,session in pairs(S.Sessions) do
 			local room=session.Room
-			if session.Engine and (not room or room.Started and not room.Ended) then
+			if session.Engine and not session.RespawnAt and (not session.StartAt or now>=session.StartAt) and (not room or room.Started and not room.Ended and now<room.EndAt) then
 				local attack=E.step(session.Engine,1/60)
-				if room and attack>0 then local other=room.Players[1]==player and room.Players[2] or room.Players[1]; if S.Sessions[other] then E.addGarbage(S.Sessions[other].Engine,attack) end end
+				if room and attack>0 then deliver(room,player,attack) end
 			end
 		end
 	end
@@ -4460,14 +4615,19 @@ RunService.Heartbeat:Connect(function(dt)
 			room.Played=math.max(0,now-room.StartAt)
 			local a,b=room.Players[1],room.Players[2]; local sa,sb=S.Sessions[a],S.Sessions[b]
 			if sa and sb then
-				if not sa.Engine.alive or not sb.Engine.alive then
+				if (not room.Ranked or not R.TimedKO) and (not sa.Engine.alive or not sb.Engine.alive) then
 					local winner=sa.Engine.alive and a or sb.Engine.alive and b or nil
 					task.spawn(finish,room,winner,"KO")
 				elseif now>=room.EndAt then
 					-- Deterministic policy: sent garbage, then cleared lines, then score.
 					local winner
-					for _,values in ipairs({{sa.Engine.stats.Sent,sb.Engine.stats.Sent},{sa.Engine.lines,sb.Engine.lines},{sa.Engine.score,sb.Engine.score}}) do if values[1]~=values[2] then winner=values[1]>values[2] and a or b; break end end
+					for _,values in ipairs({{sa.Engine.stats.KOs,sb.Engine.stats.KOs},{sa.Engine.stats.Sent,sb.Engine.stats.Sent},{sa.Engine.lines,sb.Engine.lines},{sa.Engine.score,sb.Engine.score}}) do if values[1]~=values[2] then winner=values[1]>values[2] and a or b; break end end
 					task.spawn(finish,room,winner,"Time expired")
+				elseif room.Ranked and R.TimedKO then
+					for _,p in ipairs(room.Players) do local session=S.Sessions[p]
+						if not session.Engine.alive and not session.RespawnAt then recoverKO(room,p,now) end
+						if session.RespawnAt and now>=session.RespawnAt then respawn(session) end
+					end
 				end
 			end
 		end
@@ -4478,7 +4638,8 @@ RunService.Heartbeat:Connect(function(dt)
 			local room=session.Room
 			if session.Engine and (not room or not room.Ended) then
 				local other=room and (room.Players[1]==player and room.Players[2] or room.Players[1]); local osession=other and S.Sessions[other]
-				send(player,"State",{Mode=session.Mode,Own=E.pack(session.Engine),Opponent=osession and E.pack(osession.Engine),Profiles=room and room.PublicProfiles,Countdown=room and not room.Started and math.max(0,math.ceil((room.StartAt or now+3)-now)) or 0,Remaining=room and room.Started and math.max(0,room.EndAt-now) or nil,Round=1})
+				local start=room and room.StartAt or session.StartAt
+				send(player,"State",{Mode=session.Mode,MatchId=room and room.Id or session.Id,StartAt=start,EndAt=room and room.EndAt,ServerNow=now,Own=E.pack(session.Engine),Opponent=osession and E.pack(osession.Engine),Profiles=room and room.PublicProfiles,Countdown=start and math.max(0,math.ceil(start-now)) or room and not room.Started and R.Countdown or 0,Remaining=room and (room.Started and math.max(0,room.EndAt-now) or R.MatchDuration) or nil,RespawnAt=session.RespawnAt,Round=1})
 			end
 		end
 	end
@@ -4551,20 +4712,20 @@ for category,slot in pairs(Catalog.Slots) do
 end
 print("PASS all four default cosmetics equip through the real remote without spending Cash")
 local chosen={}; assert(Data:mutate(shopper,function(d)
-	d.Cash=1200
+	d.Cash=125000
 	for category in pairs(Catalog.Slots) do local item=Catalog.list(category)[2]; chosen[category]=item.Id; d.Inventory[category][item.Id]=true end
 	return true
 end))
 for category,slot in pairs(Catalog.Slots) do
 	for _,id in ipairs({chosen[category],"Default",chosen[category]}) do
 		local reply=request(category,id); assert(reply.Success and reply.Category==category and reply.Id==id)
-		assert(Data:get(shopper).Equipped[slot]==id and Data:get(shopper).Cash==1200)
+		assert(Data:get(shopper).Equipped[slot]==id and Data:get(shopper).Cash==125000)
 	end
 end
 print("PASS repeated owned skin/drop/ghost/sound equips preserve Cash and return accurate success payloads")
 local missing=Catalog.list("BrickSkins")[3].Id; local reply=request("BrickSkins",missing)
 assert(not reply.Success and reply.Code=="NotOwned" and reply.Message=="You don't own this cosmetic yet.")
-assert(Data:get(shopper).Equipped.BrickSkin==chosen.BrickSkins and Data:get(shopper).Cash==1200)
+assert(Data:get(shopper).Equipped.BrickSkin==chosen.BrickSkins and Data:get(shopper).Cash==125000)
 for _,pair in ipairs({{"BrickSkins","Missing"},{"Unknown","Default"},{"HardDropEffects","Default"}}) do
 	reply=request(pair[1],pair[2]); assert(not reply.Success and reply.Code=="Unavailable")
 end
@@ -4573,7 +4734,7 @@ print("PASS unowned, mismatched and malformed cosmetic requests reject without c
 -- Exercise the import on Buy as well; then equip an actually purchased item.
 S.Buckets={}; send(shopper,"Buy",{Category="BrickSkins",Id=missing}); tick(0.1)
 assert(sent[shopper].CosmeticResult.Success and Data:get(shopper).Inventory.BrickSkins[missing])
-balance=1200-Catalog.Items["BrickSkins:"..missing].Price
+balance=125000-Catalog.Items["BrickSkins:"..missing].Price
 reply=request("BrickSkins",missing); assert(reply.Success and Data:get(shopper).Cash==balance); chosen.BrickSkins=missing
 Data:release(shopper); tick(0.1)
 local reloaded; task.spawn(function() reloaded=Data:load(shopper) end); tick(0.3); assert(reloaded)

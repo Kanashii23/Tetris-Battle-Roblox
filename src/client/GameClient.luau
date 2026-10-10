@@ -15,6 +15,7 @@ function Client.new(hooks)
 	self.Connection=self.Network.OnClientEvent:Connect(function(kind,data)
 		if kind=="Profile" then
 			local previous=self.Profile; self.Profile=data
+   local pending=self.PendingCosmetic; if pending and data then local slot=Catalog.Slots[pending.Category]; if pending.Kind=="Buy" and data.Inventory[pending.Category][pending.Id] or pending.Kind=="Equip" and data.Equipped[slot]==pending.Id then self.PendingCosmetic=nil end end
 			if data then
 				self.Audio.Pack=data.Equipped.SoundPack
 				if previous then
@@ -32,25 +33,28 @@ function Client.new(hooks)
 			end
 		elseif kind=="Lobby" then self.Mode="Lobby"; self.State=nil; self.LastEvent=0; self.Input:enable(false); self.Audio:music("MenuMusic"); hooks.Lobby()
 		elseif kind=="Searching" then self.Mode="Searching"; self.Input:enable(false); self.Audio:play("Matchmaking"); hooks.Searching(data)
-		elseif kind=="Found" then self.Mode=data.Ranked and "Ranked" or "Challenge"; self.LastEvent=0; self.Audio:play("OpponentFound"); hooks.Found(data)
+		elseif kind=="Found" then self.Mode=data.Ranked and "Ranked" or "Challenge"; self.MatchId=data.MatchId; self.LastEvent=0; self.LastBattleEvent=0; self.Audio:play("OpponentFound"); hooks.Found(data)
 		elseif kind=="State" then
 			Engine.unpack(data.Own); Engine.unpack(data.Opponent)
 			local changed=self.Mode~=data.Mode; self.Mode=data.Mode; self.State=data
+			if data.MatchId and self.MatchId~=data.MatchId then self.LastEvent=0; self.LastBattleEvent=0; self.MatchId=data.MatchId end
 			if changed then self.LastEvent=0 end
 			self.Input:enable(data.Own.alive and not data.Own.paused and data.Countdown==0 and not self.Blocked)
 			self.Audio:music(data.Mode=="Solo" and "SoloMusic" or "BattleMusic")
-			for _,event in ipairs(data.Own.events) do if event.id>self.LastEvent then self.LastEvent=event.id; self.Audio:play(event.name); if hooks.Event then hooks.Event(event) end end end
+			for _,event in ipairs(data.Own.events) do if event.id>self.LastEvent then self.LastEvent=event.id; if event.name~="KO" or data.Mode=="Solo" then self.Audio:play(event.name); if hooks.Event then hooks.Event(event) end end end end
 			hooks.State(data)
+		elseif kind=="BattleEvent" then
+			if data.MatchId==self.MatchId and data.Id>(self.LastBattleEvent or 0) then self.LastBattleEvent=data.Id; if hooks.BattleEvent then hooks.BattleEvent(data) end end
 		elseif kind=="Result" then
+			if data.Id and self.MatchId and data.Id~=self.MatchId then return end
+			if self.LastResultId==data.Id and data.Id then return end; self.LastResultId=data.Id; self.ResultElapsed=0; self.ResultPhases={}
 			Engine.unpack(data.Own); Engine.unpack(data.Opponent)
-			self.Mode="Result"; self.Input:enable(false); self.Audio:music("MenuMusic"); self.Audio:play(data.Outcome=="Win" and "Victory" or data.Outcome=="Lose" and "Defeat" or "Draw")
-			if data.BeforeRank and data.AfterRank and data.BeforeRank.Tier~=data.AfterRank.Tier then self.Audio:play(data.AfterRank.Tier>data.BeforeRank.Tier and "RankUp" or "RankDown") end
-			if data.Cash>0 then self.Audio:play("CashEarned") end
+			self.Mode="Result"; self.Input:enable(false); self.Audio:music("MenuMusic"); self.Audio:warning(0,0)
 			hooks.Result(data)
 		elseif kind=="Leaderboard" then hooks.Leaderboard(data)
 		elseif kind=="Challenge" then hooks.Challenge(data)
 		elseif kind=="CosmeticResult" then
-			self.LastCosmeticResult=data -- Profile remains the authority for equipped state.
+			self.PendingCosmetic=nil; self.LastCosmeticResult=data -- Profile remains the authority for equipped state.
 			if hooks.CosmeticResult then hooks.CosmeticResult(data) end
 		elseif kind=="Action" then self.Audio:play(data.Sound)
 		elseif kind=="Message" then hooks.Message(data) end
@@ -61,7 +65,7 @@ function Client.new(hooks)
 	return self
 end
 function Client:send(kind,payload)
-	if kind=="Solo" or kind=="Restart" then self.LastEvent=0 end
+	if kind=="Solo" or kind=="Restart" then self.LastEvent=0; if self.Hooks.ResetCosmetics then self.Hooks.ResetCosmetics() end end
 	self.Network:FireServer(kind,payload)
 end
 function Client:block(value)
